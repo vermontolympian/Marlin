@@ -798,6 +798,23 @@ class Temperature {
 
     static void checkExtruderAutoFans();
 
+    #if HAS_FAN_TACH
+      enum {
+        EFCE_OK = 0,   //!< normal operation, all fans are ok
+        EFCE_FIXED,    //!< previous fan error was fixed
+        EFCE_DETECTED, //!< fan error detected, but not reported yet
+        EFCE_REPORTED  //!< fan error detected and reported
+      };
+      extern volatile uint8_t fan_check_error;
+
+      void countFanSpeed();
+      void checkFanSpeed();
+      void fanSpeedError(unsigned char _fan);
+
+      void check_fans();
+
+    #endif // HAS_FAN_TACH
+
     static float get_pid_output_hotend(const uint8_t e);
 
     #if ENABLED(PIDTEMPBED)

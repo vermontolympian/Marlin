@@ -739,6 +739,108 @@ int16_t Temperature::getHeaterPower(const heater_ind_t heater_id) {
 
 #endif // HAS_AUTO_FAN
 
+
+#if HAS_FAN_TACH
+  void countFanSpeed()
+  {
+    //SERIAL_ECHOPGM("edge counter 1:"); MYSERIAL.println(fan_edge_counter[1]);
+    fan_speed[0] = (fan_edge_counter[0] * (float(250) / (_millis() - extruder_autofan_last_check)));
+    fan_speed[1] = (fan_edge_counter[1] * (float(250) / (_millis() - extruder_autofan_last_check)));
+    /*SERIAL_ECHOPGM("time interval: "); MYSERIAL.println(_millis() - extruder_autofan_last_check);
+    SERIAL_ECHOPGM("extruder fan speed:"); MYSERIAL.print(fan_speed[0]); SERIAL_ECHOPGM("; edge counter:"); MYSERIAL.println(fan_edge_counter[0]);
+    SERIAL_ECHOPGM("print fan speed:"); MYSERIAL.print(fan_speed[1]); SERIAL_ECHOPGM("; edge counter:"); MYSERIAL.println(fan_edge_counter[1]);
+    SERIAL_ECHOLNPGM(" ");*/
+    fan_edge_counter[0] = 0;
+    fan_edge_counter[1] = 0;
+  }
+
+  void checkFanSpeed()
+  {
+    uint8_t max_print_fan_errors = 0;
+    uint8_t max_extruder_fan_errors = 0;
+  #ifdef FAN_SOFT_PWM
+    max_print_fan_errors = 3; //15 seconds
+    max_extruder_fan_errors = 2; //10seconds
+  #else //FAN_SOFT_PWM
+    max_print_fan_errors = 15; //15 seconds
+    max_extruder_fan_errors = 5; //5 seconds
+  #endif //FAN_SOFT_PWM
+
+    if(fans_check_enabled != false)
+      fans_check_enabled = (eeprom_read_byte((uint8_t*)EEPROM_FAN_CHECK_ENABLED) > 0);
+    static unsigned char fan_speed_errors[2] = { 0,0 };
+  #if (defined(FANCHECK) && defined(TACH_0) && (TACH_0 >-1))
+    if ((fan_speed[0] == 0) && (current_temperature[0] > EXTRUDER_AUTO_FAN_TEMPERATURE)){ fan_speed_errors[0]++;}
+    else{
+      fan_speed_errors[0] = 0;
+      host_keepalive();
+    }
+  #endif
+  #if (defined(FANCHECK) && defined(TACH_1) && (TACH_1 >-1))
+    if ((fan_speed[1] < 5) && ((blocks_queued() ? block_buffer[block_buffer_tail].fan_speed : fanSpeed) > MIN_PRINT_FAN_SPEED)) fan_speed_errors[1]++;
+    else fan_speed_errors[1] = 0;
+  #endif
+
+    // drop the fan_check_error flag when both fans are ok
+    if( fan_speed_errors[0] == 0 && fan_speed_errors[1] == 0 && fan_check_error == EFCE_REPORTED){
+      // we may even send some info to the LCD from here
+      fan_check_error = EFCE_FIXED;
+    }
+    if ((fan_check_error == EFCE_FIXED) && !PRINTER_ACTIVE){
+      fan_check_error = EFCE_OK; //if the issue is fixed while the printer is doing nothing, reenable processing immediately.
+      lcd_reset_alert_level(); //for another fan speed error
+    }
+    if ((fan_speed_errors[0] > max_extruder_fan_errors) && fans_check_enabled && (fan_check_error == EFCE_OK)) {
+      fan_speed_errors[0] = 0;
+      fanSpeedError(0); //extruder fan
+    }
+    if ((fan_speed_errors[1] > max_print_fan_errors) && fans_check_enabled && (fan_check_error == EFCE_OK)) {
+      fan_speed_errors[1] = 0;
+      fanSpeedError(1); //print fan
+    }
+  }
+
+  //! Prints serialMsg to serial port, displays lcdMsg onto the LCD and beeps.
+  //! Extracted from fanSpeedError to save some space.
+  //! @param serialMsg pointer into PROGMEM, this text will be printed to the serial port
+  //! @param lcdMsg pointer into PROGMEM, this text will be printed onto the LCD
+  static void fanSpeedErrorBeep(const char *serialMsg, const char *lcdMsg){
+    SERIAL_ECHOLNRPGM(serialMsg);
+    if (get_message_level() == 0) {
+      Sound_MakeCustom(200,0,true);
+      LCD_ALERTMESSAGERPGM(lcdMsg);
+    }
+  }
+
+  void fanSpeedError(unsigned char _fan) {
+    if (get_message_level() != 0 && isPrintPaused) return;
+    //to ensure that target temp. is not set to zero in case that we are resuming print
+    if (card.sdprinting || is_usb_printing) {
+      if (heating_status != 0) {
+        lcd_print_stop();
+      }
+      else {
+        fan_check_error = EFCE_DETECTED; //plans error for next processed command
+      }
+    }
+    else {
+      // SERIAL_PROTOCOLLNRPGM(MSG_OCTOPRINT_PAUSED); //Why pause octoprint? is_usb_printing would be true in that case, so there is no need for this.
+      setTargetHotend0(0);
+          heating_status = 0;
+          fan_check_error = EFCE_REPORTED;
+    }
+    switch (_fan) {
+    case 0:	// extracting the same code from case 0 and case 1 into a function saves 72B
+      fanSpeedErrorBeep(PSTR("Extruder fan speed is lower than expected"), MSG_FANCHECK_EXTRUDER);
+      break;
+    case 1:
+      fanSpeedErrorBeep(PSTR("Print fan speed is lower than expected"), MSG_FANCHECK_PRINT);
+      break;
+    }
+      // SERIAL_PROTOCOLLNRPGM(MSG_OK); //This ok messes things up with octoprint.
+  }
+#endif // HAS_FAN_TACH
+
 //
 // Temperature Error Handlers
 //
@@ -1079,6 +1181,11 @@ void Temperature::manage_heater() {
       checkExtruderAutoFans();
       next_auto_fan_check_ms = ms + 2500UL;
     }
+  #endif
+
+  #if HAS_FAN_TACH
+	  countFanSpeed();
+	  checkFanSpeed();
   #endif
 
   #if ENABLED(FILAMENT_WIDTH_SENSOR)
@@ -2731,6 +2838,10 @@ void Temperature::tick() {
     babystep.task();
   #endif
 
+  #if HAS_FAN_TACH
+	  check_fans();
+  #endif
+
   // Poll endstops state, if required
   endstops.poll();
 
@@ -3216,3 +3327,23 @@ void Temperature::tick() {
   #endif // HAS_HEATED_CHAMBER
 
 #endif // HAS_TEMP_SENSOR
+
+#if HAS_FAN_TACH
+void check_fans() {
+#ifdef FAN_SOFT_PWM
+	if (READ(TACH_0) != fan_state[0]) {
+		if(fan_measuring) fan_edge_counter[0] ++;
+		fan_state[0] = !fan_state[0];
+	}
+#else //FAN_SOFT_PWM
+	if (READ(TACH_0) != fan_state[0]) {
+		fan_edge_counter[0] ++;
+		fan_state[0] = !fan_state[0];
+	}
+#endif
+	//if (READ(TACH_1) != fan_state[1]) {
+	//	fan_edge_counter[1] ++;
+	//	fan_state[1] = !fan_state[1];
+	//}
+}
+#endif // HAS_FAN_TACH
