@@ -761,9 +761,53 @@ int16_t Temperature::getHeaterPower(const heater_ind_t heater_id) {
 #if HAS_FAN_TACH
   void countFanSpeed()
   {
-    //SERIAL_ECHOPGM("edge counter 1:"); MYSERIAL.println(fan_edge_counter[1]);
-    fan_speed[0] = (fan_edge_counter[0] * (float(250) / (_millis() - extruder_autofan_last_check)));
+
     fan_speed[1] = (fan_edge_counter[1] * (float(250) / (_millis() - extruder_autofan_last_check)));
+
+    #if HAS_TACH_FAN0 && !defined(TACH_FAN0_RATE)
+      #define TACH_FAN0_RATE 250
+      fan_speed[0] = (fan_edge_counter[0] * (float(TACH_FAN0_RATE) / (_millis() - extruder_autofan_last_check)));
+    #endif
+
+    #if HAS_TACH_FAN1 && !defined(TACH_FAN1_RATE)
+      #define TACH_FAN1_RATE 250
+    #endif
+
+    #if HAS_TACH_FAN2 && !defined(TACH_FAN2_RATE)
+      #define TACH_FAN2_RATE 250
+    #endif
+
+    #if HAS_TACH_CONTROLLER_FAN && !defined(TACH_CONTROLLER_FAN_RATE)
+      #define TACH_CONTROLLER_FAN_RATE 250
+    #endif
+
+    #if HAS_TACH_AUTO_FAN_0 && !defined(TACH_AUTO_FAN_0_RATE)
+      #define TACH_AUTO_FAN_0_RATE 250
+    #endif
+
+    #if HAS_TACH_AUTO_FAN_1 && !defined(TACH_AUTO_FAN_1_RATE)
+      #define TACH_AUTO_FAN_1_RATE 250
+    #endif
+
+    #if HAS_TACH_AUTO_FAN_2 && !defined(TACH_AUTO_FAN_2_RATE)
+      #define TACH_AUTO_FAN_2_RATE 250
+    #endif
+
+    #if HAS_TACH_AUTO_FAN_3 && !defined(TACH_AUTO_FAN_3_RATE)
+      #define TACH_AUTO_FAN_3_RATE 250
+    #endif
+
+    #if HAS_TACH_AUTO_FAN_4 && !defined(TACH_AUTO_FAN_4_RATE)
+      #define TACH_AUTO_FAN_4_RATE 250
+    #endif
+
+    #if HAS_TACH_AUTO_FAN_5 && !defined(TACH_AUTO_FAN_5_RATE)
+      #define TACH_AUTO_FAN_5_RATE 250
+    #endif
+
+    #if HAS_TACH_AUTO_CHAMBER_FAN && !defined(TACH_AUTO_CHAMBER_FAN_RATE)
+      #define TACH_AUTO_CHAMBER_FAN_RATE 250
+    #endif
     /*SERIAL_ECHOPGM("time interval: "); MYSERIAL.println(_millis() - extruder_autofan_last_check);
     SERIAL_ECHOPGM("extruder fan speed:"); MYSERIAL.print(fan_speed[0]); SERIAL_ECHOPGM("; edge counter:"); MYSERIAL.println(fan_edge_counter[0]);
     SERIAL_ECHOPGM("print fan speed:"); MYSERIAL.print(fan_speed[1]); SERIAL_ECHOPGM("; edge counter:"); MYSERIAL.println(fan_edge_counter[1]);
@@ -1202,8 +1246,36 @@ void Temperature::manage_heater() {
   #endif
 
   #if HAS_FAN_TACH
-	  countFanSpeed();
-	  checkFanSpeed();
+	  #define FAN_CHECK_PERIOD 5000 //5s
+    #define FAN_CHECK_DURATION 100 //100ms
+
+      if ((_millis() - extruder_autofan_last_check > FAN_CHECK_PERIOD) && (!fan_measuring)) {
+        extruder_autofan_last_check = _millis();
+        fanSpeedBckp = fanSpeedSoftPwm;
+
+        if (fanSpeedSoftPwm >= MIN_PRINT_FAN_SPEED) { //if we are in rage where we are doing fan check, set full PWM range for a short time to measure fan RPM by reading tacho signal without modulation by PWM signal
+        //  printf_P(PSTR("fanSpeedSoftPwm 1: %d\n"), fanSpeedSoftPwm);
+          fanSpeedSoftPwm = 255;
+        }
+        fan_measuring = true;
+      }
+      if ((_millis() - extruder_autofan_last_check > FAN_CHECK_DURATION) && (fan_measuring)) {
+        countFanSpeed();
+        checkFanSpeed();
+        //printf_P(PSTR("fanSpeedSoftPwm 1: %d\n"), fanSpeedSoftPwm);
+        fanSpeedSoftPwm = fanSpeedBckp;
+        //printf_P(PSTR("fan PWM: %d; extr fanSpeed measured: %d; print fan speed measured: %d \n"), fanSpeedBckp, fan_speed[0], fan_speed[1]);
+        extruder_autofan_last_check = _millis();
+        fan_measuring = false;
+      }
+    #else //FAN_SOFT_PWM
+      if(_millis() - extruder_autofan_last_check > 1000)  // only need to check fan state very infrequently
+      {
+        countFanSpeed();
+        checkFanSpeed();
+        extruder_autofan_last_check = _millis();
+      }
+    #endif //FAN_SOFT_PWM
   #endif
 
   #if ENABLED(FILAMENT_WIDTH_SENSOR)
