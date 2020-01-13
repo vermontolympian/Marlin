@@ -1106,48 +1106,53 @@
 
 #define HAS_FAN_TACH ANY(HAS_TACH_FAN0, HAS_TACH_FAN1, HAS_TACH_FAN2, HAS_TACH_CONTROLLER_FAN, HAS_TACH_AUTO_FAN_0, HAS_TACH_AUTO_FAN_1, HAS_TACH_AUTO_FAN_2, HAS_TACH_AUTO_FAN_3, HAS_TACH_AUTO_FAN_4, HAS_TACH_AUTO_FAN_5, HAS_TACH_AUTO_CHAMBER_FAN)
 
-#if HAS_TACH_FAN0 && !defined(TACH_FAN0_RATE)
-  #define TACH_FAN0_RATE 250
-#endif
+  #if HAS_FAN_TACH
+  #if HAS_TACH_FAN0 && !defined(TACH_FAN0_RATE)
+    #define TACH_FAN0_RATE 250
+  #endif
 
-#if HAS_TACH_FAN1 && !defined(TACH_FAN1_RATE)
-  #define TACH_FAN1_RATE 250
-#endif
+  #if HAS_TACH_FAN1 && !defined(TACH_FAN1_RATE)
+    #define TACH_FAN1_RATE 250
+  #endif
 
-#if HAS_TACH_FAN2 && !defined(TACH_FAN2_RATE)
-  #define TACH_FAN2_RATE 250
-#endif
+  #if HAS_TACH_FAN2 && !defined(TACH_FAN2_RATE)
+    #define TACH_FAN2_RATE 250
+  #endif
 
-#if HAS_TACH_CONTROLLER_FAN && !defined(TACH_CONTROLLER_FAN_RATE)
-  #define TACH_CONTROLLER_FAN_RATE 250
-#endif
+  #if HAS_TACH_CONTROLLER_FAN && !defined(TACH_CONTROLLER_FAN_RATE)
+    #define TACH_CONTROLLER_FAN_RATE 250
+  #endif
 
-#if HAS_TACH_AUTO_FAN_0 && !defined(TACH_AUTO_FAN_0_RATE)
-  #define TACH_AUTO_FAN_0_RATE 250
-#endif
+  #if HAS_TACH_AUTO_FAN_0 && !defined(TACH_AUTO_FAN_0_RATE)
+    #define TACH_AUTO_FAN_0_RATE 250
+  #endif
 
-#if HAS_TACH_AUTO_FAN_1 && !defined(TACH_AUTO_FAN_1_RATE)
-  #define TACH_AUTO_FAN_1_RATE 250
-#endif
+  #if HAS_TACH_AUTO_FAN_1 && !defined(TACH_AUTO_FAN_1_RATE)
+    #define TACH_AUTO_FAN_1_RATE 250
+  #endif
 
-#if HAS_TACH_AUTO_FAN_2 && !defined(TACH_AUTO_FAN_2_RATE)
-  #define TACH_AUTO_FAN_2_RATE 250
-#endif
+  #if HAS_TACH_AUTO_FAN_2 && !defined(TACH_AUTO_FAN_2_RATE)
+    #define TACH_AUTO_FAN_2_RATE 250
+  #endif
 
-#if HAS_TACH_AUTO_FAN_3 && !defined(TACH_AUTO_FAN_3_RATE)
-  #define TACH_AUTO_FAN_3_RATE 250
-#endif
+  #if HAS_TACH_AUTO_FAN_3 && !defined(TACH_AUTO_FAN_3_RATE)
+    #define TACH_AUTO_FAN_3_RATE 250
+  #endif
 
-#if HAS_TACH_AUTO_FAN_4 && !defined(TACH_AUTO_FAN_4_RATE)
-  #define TACH_AUTO_FAN_4_RATE 250
-#endif
+  #if HAS_TACH_AUTO_FAN_4 && !defined(TACH_AUTO_FAN_4_RATE)
+    #define TACH_AUTO_FAN_4_RATE 250
+  #endif
 
-#if HAS_TACH_AUTO_FAN_5 && !defined(TACH_AUTO_FAN_5_RATE)
-  #define TACH_AUTO_FAN_5_RATE 250
-#endif
+  #if HAS_TACH_AUTO_FAN_5 && !defined(TACH_AUTO_FAN_5_RATE)
+    #define TACH_AUTO_FAN_5_RATE 250
+  #endif
 
-#if HAS_TACH_AUTO_CHAMBER_FAN && !defined(TACH_AUTO_CHAMBER_FAN_RATE)
-  #define TACH_AUTO_CHAMBER_FAN_RATE 250
+  #if HAS_TACH_AUTO_CHAMBER_FAN && !defined(TACH_AUTO_CHAMBER_FAN_RATE)
+    #define TACH_AUTO_CHAMBER_FAN_RATE 250
+  #endif
+
+  #define FAN_CHECK_PERIOD 5000 //5s
+  #define FAN_CHECK_DURATION 100 //100ms
 #endif
 
 // Servos

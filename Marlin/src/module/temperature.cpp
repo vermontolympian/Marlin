@@ -1246,9 +1246,6 @@ void Temperature::manage_heater() {
   #endif
 
   #if HAS_FAN_TACH
-	  #define FAN_CHECK_PERIOD 5000 //5s
-    #define FAN_CHECK_DURATION 100 //100ms
-
       if ((_millis() - extruder_autofan_last_check > FAN_CHECK_PERIOD) && (!fan_measuring)) {
         extruder_autofan_last_check = _millis();
         fanSpeedBckp = fanSpeedSoftPwm;
