@@ -56,21 +56,53 @@
 //
 // Steppers
 //
-#define X_STEP_PIN         -1
-#define X_DIR_PIN          -1
-#define X_ENABLE_PIN       -1//44
+#define X_STEP_PIN         25
+#define X_DIR_PIN          23
+#define X_ENABLE_PIN       27//44
 
-#define Y_STEP_PIN         -1
-#define Y_DIR_PIN          -1
-#define Y_ENABLE_PIN       -1//32
+#define Y_STEP_PIN         33
+#define Y_DIR_PIN          31 //32
+#define Y_ENABLE_PIN       32
 
-#define Z_STEP_PIN         -1//45
-#define Z_DIR_PIN          -1
-#define Z_ENABLE_PIN       -1//34
+#define Z_STEP_PIN         35//35
+#define Z_DIR_PIN          36
+#define Z_ENABLE_PIN       34//34
 
-#define E0_STEP_PIN        69
-#define E0_DIR_PIN         29
-#define E0_ENABLE_PIN      22
+#define E0_STEP_PIN        42
+#define E0_DIR_PIN         43
+#define E0_ENABLE_PIN      37
+
+#define E1_STEP_PIN        49
+#define E1_DIR_PIN         47
+#define E1_ENABLE_PIN      48
+
+#define MOTOR_CURRENT_PWM_XY_PIN 11
+#define MOTOR_CURRENT_PWM_Z_PIN  44
+#define MOTOR_CURRENT_PWM_E_PIN  44
+// Motor current PWM conversion, PWM value = MotorCurrentSetting * 255 / range
+#ifndef MOTOR_CURRENT_PWM_RANGE
+  #define MOTOR_CURRENT_PWM_RANGE 2000
+#endif
+#define DEFAULT_PWM_MOTOR_CURRENT  {1300, 1300, 1250}
+
+///////////////UNPOPULATED SOCKETS////////////////
+
+#define E2_STEP_PIN        49
+#define E2_DIR_PIN         47
+#define E2_ENABLE_PIN      48
+
+#define E3_STEP_PIN        49
+#define E3_DIR_PIN         47
+#define E3_ENABLE_PIN      48
+
+#define E4_STEP_PIN        49
+#define E4_DIR_PIN         47
+#define E4_ENABLE_PIN      48
+
+#define E5_STEP_PIN        49
+#define E5_DIR_PIN         47
+#define E5_ENABLE_PIN      48
+
 
 //
 // Temperature Sensors
@@ -119,5 +151,5 @@
 // Common I/O
 
 #define FIL_RUNOUT_PIN      10
-//#define BATTERY     38
-#define BEEPER_PIN         -1
+#define PS_ON_PIN     38 // UPS Module
+#define BEEPER_PIN         18
