@@ -60,9 +60,9 @@
 #define X_DIR_PIN          23
 #define X_ENABLE_PIN       27//44
 
-#define Y_STEP_PIN         33
-#define Y_DIR_PIN          31 //32
-#define Y_ENABLE_PIN       32
+#define Y_STEP_PIN         32//33
+#define Y_DIR_PIN          33//31 //32
+#define Y_ENABLE_PIN       31//32
 
 #define Z_STEP_PIN         35//35
 #define Z_DIR_PIN          36
@@ -76,9 +76,11 @@
 #define E1_DIR_PIN         47
 #define E1_ENABLE_PIN      48
 
-#define MOTOR_CURRENT_PWM_XY_PIN 11
-#define MOTOR_CURRENT_PWM_Z_PIN  44
-#define MOTOR_CURRENT_PWM_E_PIN  44
+#define MOTOR_CURRENT_PWM_X_PIN  11
+#define MOTOR_CURRENT_PWM_Y_PIN  44
+#define MOTOR_CURRENT_PWM_Z_PIN  45
+#define MOTOR_CURRENT_PWM_E_PIN  46
+
 // Motor current PWM conversion, PWM value = MotorCurrentSetting * 255 / range
 #ifndef MOTOR_CURRENT_PWM_RANGE
   #define MOTOR_CURRENT_PWM_RANGE 2000
