@@ -22,10 +22,12 @@
 #pragma once
 
 /**
- * CNControls V15 for HMS434 pin assignments
+ * Intamsys Funmat HT V4.0 Mainboard
+ * 4988 Drivers Tested
+ * 2208 version exists and may or may not work
  */
 
-#if !defined(__AVR_ATmega1280__) && !defined(__AVR_ATmega2560__)
+#if !defined(__AVR_ATmega2560__)
   #error "Oops! Select 'Arduino/Genuino Mega or Mega 2560' in 'Tools > Board.'"
 #endif
 
@@ -34,7 +36,7 @@
 //
 // Servos
 //
-#define SERVO0_PIN          -1
+#define SERVO0_PIN          12 // Uses High Temp Present Jumper Pin
 
 //
 // Limit Switches
@@ -155,3 +157,21 @@
 #define FIL_RUNOUT_PIN      10
 #define PS_ON_PIN     38 // UPS Module
 #define BEEPER_PIN         18
+
+///////////////////// SPARE HEADERS //////////////
+
+/**
+ * 
+ * J25
+ * 1 D54
+ * 2 D55
+ * 3 D56
+ * 4 D57
+ * 5 D58
+ * 6 D59
+ * 7 D60
+ * 8 D61
+
+Hotend High Temp Connected : D12
+*/
+
