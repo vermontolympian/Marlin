@@ -89,24 +89,6 @@
 #endif
 #define DEFAULT_PWM_MOTOR_CURRENT  {1300, 1300, 1250}
 
-///////////////UNPOPULATED SOCKETS////////////////
-
-#define E2_STEP_PIN        49
-#define E2_DIR_PIN         47
-#define E2_ENABLE_PIN      48
-
-#define E3_STEP_PIN        49
-#define E3_DIR_PIN         47
-#define E3_ENABLE_PIN      48
-
-#define E4_STEP_PIN        49
-#define E4_DIR_PIN         47
-#define E4_ENABLE_PIN      48
-
-#define E5_STEP_PIN        49
-#define E5_DIR_PIN         47
-#define E5_ENABLE_PIN      48
-
 
 //
 // Temperature Sensors
