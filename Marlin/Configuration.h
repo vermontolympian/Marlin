@@ -171,6 +171,8 @@
 //Add filtering to endstops when long extensions are used. Makes homing more reliable but less accurate.
 //#define CableExtensionNoiseFilter
 
+//Disabled Bed PID to prevent lights flickering on AC beds
+
 /*
    Choose a probe grid density below. Faster probes less points, but is less accurate.
    Extreme is for extremely uneven or tilted bed surfaces.
@@ -997,7 +999,7 @@
  * heater. If your configuration is significantly different than this and you don't understand
  * the issues involved, don't use bed PID until someone else verifies that your hardware works.
  */
-#if NONE(MachineCR10Orig, LowMemoryBoard) || ENABLED(MelziHostOnly)
+#if NONE(MachineCR10Orig, LowMemoryBoard) || ENABLED(MelziHostOnly) && DISABLED(NoBedPID)
   #define PIDTEMPBED
 #endif
 //#define BED_LIMIT_SWITCHING
