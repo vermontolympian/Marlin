@@ -999,7 +999,7 @@
  * heater. If your configuration is significantly different than this and you don't understand
  * the issues involved, don't use bed PID until someone else verifies that your hardware works.
  */
-#if NONE(MachineCR10Orig, LowMemoryBoard) || ENABLED(MelziHostOnly) && DISABLED(NoBedPID)
+#if (NONE(MachineCR10Orig, LowMemoryBoard) || ENABLED(MelziHostOnly)) && DISABLED(NoBedPID)
   #define PIDTEMPBED
 #endif
 //#define BED_LIMIT_SWITCHING
