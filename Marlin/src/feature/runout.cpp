@@ -40,6 +40,7 @@ bool FilamentMonitorBase::enabled = true,
 #endif
 
 #if ENABLED(TOOLCHANGE_MIGRATION_FEATURE)
+  #define DEBUG_TOOLCHANGE_MIGRATION_FEATURE
   #include "../module/tool_change.h"
   #define DEBUG_OUT ENABLED(DEBUG_TOOLCHANGE_MIGRATION_FEATURE)
   #include "../core/debug_out.h"
