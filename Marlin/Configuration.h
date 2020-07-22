@@ -201,6 +201,8 @@
 
 //#define UnstableTemps // define if temps are unstable and you need a temporary workaround
 
+//#define NoBedPID //Disabled Bed PID for flickering lights
+
 /**
  * Marlin 3D Printer Firmware
  * Copyright (c) 2020 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
