@@ -815,9 +815,7 @@
 #endif
 
 // Check for stuck or disconnected endstops during homing moves.
-#if DISABLED(TazPro, MiniV2)
-  #define DETECT_BROKEN_ENDSTOP
-#endif
+#define DETECT_BROKEN_ENDSTOP
 
 //=============================================================================
 //============================== Movement Settings ============================
@@ -1457,7 +1455,7 @@
  * Turn on with the command 'M111 S32'.
  * NOTE: Requires a lot of PROGMEM!
  */
-#define DEBUG_LEVELING_FEATURE
+//#define DEBUG_LEVELING_FEATURE
 
 #if ANY(MESH_BED_LEVELING, AUTO_BED_LEVELING_BILINEAR, AUTO_BED_LEVELING_UBL)
   // Gradually reduce leveling correction until a set height is reached,
