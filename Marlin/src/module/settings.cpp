@@ -2127,7 +2127,6 @@ void MarlinSettings::postprocess() {
           if (!validating)
             COPY(stepper.motor_current_setting, motor_current_setting);
         #endif
-        SERIAL_ECHOLN("DIGIPOTS Loaded");
       }
 
       //
@@ -2821,13 +2820,14 @@ void MarlinSettings::reset() {
   //
   // DIGIPOTS
   //
-  SERIAL_ECHOLN("Writing Digipot");
   #if HAS_DIGIPOTSS
     static constexpr uint32_t tmp_motor_current_setting[] = DIGIPOT_MOTOR_CURRENT;
+    DEBUG_ECHOLNPGM("Writing Digipot");
     LOOP_L_N(q, COUNT(tmp_motor_current_setting))
       stepper.digipot_current(q, tmp_motor_current_setting[q]);
+    DEBUG_ECHOLNPGM("Digipot Written");
   #endif
-SERIAL_ECHOLN("Digipot Written");
+
   //
   // CNC Coordinate System
   //
