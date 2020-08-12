@@ -2820,11 +2820,11 @@ void MarlinSettings::reset() {
   //
   // DIGIPOTS
   //
-  #if HAS_DIGIPOTSS
+  #if HAS_MOTOR_CURRENT_SPI
     static constexpr uint32_t tmp_motor_current_setting[] = DIGIPOT_MOTOR_CURRENT;
     DEBUG_ECHOLNPGM("Writing Digipot");
     LOOP_L_N(q, COUNT(tmp_motor_current_setting))
-      stepper.digipot_current(q, tmp_motor_current_setting[q]);
+      stepper.set_digipot_current(q, tmp_motor_current_setting[q]);
     DEBUG_ECHOLNPGM("Digipot Written");
   #endif
 
