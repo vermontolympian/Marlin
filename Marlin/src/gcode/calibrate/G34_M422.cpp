@@ -54,6 +54,15 @@
 #define DEBUG_OUT ENABLED(DEBUG_LEVELING_FEATURE)
 #include "../../core/debug_out.h"
 
+#if ENABLED(Z_STEPPER_AUTO_ALIGN)
+
+
+#include "../../feature/z_stepper_align.h"
+
+#if ENABLED(Z_STEPPER_ALIGN_KNOWN_STEPPER_POSITIONS)
+   #include "../../libs/least_squares_fit.h"
+#endif
+
 /**
  * G34: Z-Stepper automatic alignment
  *
