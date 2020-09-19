@@ -773,6 +773,7 @@
 //
 //#define ASSISTED_TRAMMING
 #if ENABLED(ASSISTED_TRAMMING)
+
   // Define positions for probing points, use the hotend as reference not the sensor.
   #define TRAMMING_POINT_XY { {  20, 20 }, { 200,  20 }, { 200, 200 }, { 20, 200 } }
 
@@ -785,9 +786,6 @@
   // Enable to restore leveling setup after operation
   #define RESTORE_LEVELING_AFTER_G35
 
-  // Add a menu item for Assisted Tramming
-  //#define ASSISTED_TRAMMING_MENU_ITEM
-
   /**
    * Screw thread:
    *   M3: 30 = Clockwise, 31 = Counter-Clockwise
@@ -795,6 +793,7 @@
    *   M5: 50 = Clockwise, 51 = Counter-Clockwise
    */
   #define TRAMMING_SCREW_THREAD 30
+
 #endif
 
 // @section motion
@@ -1980,7 +1979,7 @@
  * Universal tool change settings.
  * Applies to all types of extruders except where explicitly noted.
  */
-#if HAS_MULTI_EXTRUDER
+#if EXTRUDERS > 1
   // Z raise distance for tool-change, as needed for some extruders
   #define TOOLCHANGE_ZRAISE                 2 // (mm)
   //#define TOOLCHANGE_ZRAISE_BEFORE_RETRACT  // Apply raise before swap retraction (if enabled)
@@ -2044,7 +2043,7 @@
     //#define TOOLCHANGE_PARK_X_ONLY          // X axis only move
     //#define TOOLCHANGE_PARK_Y_ONLY          // Y axis only move
   #endif
-#endif // HAS_MULTI_EXTRUDER
+#endif // EXTRUDERS > 1
 
 /**
  * Advanced Pause
@@ -3233,7 +3232,6 @@
 //#define HOST_ACTION_COMMANDS
 #if ENABLED(HOST_ACTION_COMMANDS)
   //#define HOST_PROMPT_SUPPORT
-  //#define HOST_START_MENU_ITEM  // Add a menu item that tells the host to start
 #endif
 
 /**
@@ -3360,26 +3358,7 @@
   //#define GANTRY_CALIBRATION_SAFE_POSITION  {X_CENTER, Y_CENTER}  // Safe position for nozzle
   //#define GANTRY_CALIBRATION_XY_PARK_FEEDRATE 3000                // XY Park Feedrate - MMM
   //#define GANTRY_CALIBRATION_COMMANDS_PRE   ""
-  #define GANTRY_CALIBRATION_COMMANDS_POST  "G28"                 // G28 is highly recommended here as position is likely no longer accurate.
-#endif
-
-/**
- * Modern replacement for the Prusa TMC_Z_CALIBRATION
- * Adds capability to work with any adjustable current drivers
- * Implements as G34 as M915 is deprecated
- */
-
-//#define MECHANICAL_GANTRY_CALIBRATION
-#if ENABLED(MECHANICAL_GANTRY_CALIBRATION)
-  #define GANTRY_CALIBRATION_CURRENT          600                   // Default calibration current in ma
-  #define GANTRY_CALIBRATION_EXTRA_HEIGHT      15                   // Extra distance in mm past Z_###_POS to move
-  #define GANTRY_CALIBRATION_DIRECTION          1                   // Set to 1 for Max or 0 for min
-  #define GANTRY_CALIBRATION_FEEDRATE         500                   // Feedrate for correction move
-
-  //#define GANTRY_CALIBRATION_SAFE_POSITION  {X_CENTER, Y_CENTER}  // Safe position for nozzle
-  //#define GANTRY_CALIBRATION_XY_PARK_FEEDRATE 3000                // XY Park Feedrate - MMM
-  //#define GANTRY_CALIBRATION_COMMANDS_PRE   ""
-  //#define GANTRY_CALIBRATION_COMMANDS_POST  "G28"
+  //#define GANTRY_CALIBRATION_COMMANDS_POST  "G28"                 // G28 is highly recommended here as position is likely no longer accurate.
 #endif
 
 /**
