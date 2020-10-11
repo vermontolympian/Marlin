@@ -2817,17 +2817,6 @@ void MarlinSettings::reset() {
   #endif
 
   //
-  // DIGIPOTS
-  //
-  #if HAS_MOTOR_CURRENT_SPI
-    static constexpr uint32_t tmp_motor_current_setting[] = DIGIPOT_MOTOR_CURRENT;
-    DEBUG_ECHOLNPGM("Writing Digipot");
-    LOOP_L_N(q, COUNT(tmp_motor_current_setting))
-      stepper.set_digipot_current(q, tmp_motor_current_setting[q]);
-    DEBUG_ECHOLNPGM("Digipot Written");
-  #endif
-
-  //
   // CNC Coordinate System
   //
   TERN_(CNC_COORDINATE_SYSTEMS, (void)gcode.select_coordinate_system(-1)); // Go back to machine space
