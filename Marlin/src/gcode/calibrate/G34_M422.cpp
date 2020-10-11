@@ -33,19 +33,29 @@
   #include "../../feature/bedlevel/bedlevel.h"
 #endif
 
-#if HAS_MULTI_HOTEND
-  #include "../../module/tool_change.h"
+#if ENABLED(Z_STEPPER_ALIGN_KNOWN_STEPPER_POSITIONS)
+   #include "../../libs/least_squares_fit.h"
 #endif
 
+#define DEBUG_OUT ENABLED(DEBUG_LEVELING_FEATURE)
+#include "../../core/debug_out.h"
 
+#include "../../feature/z_stepper_align.h"
+
+#if ENABLED(Z_STEPPER_ALIGN_KNOWN_STEPPER_POSITIONS)
+   #include "../../libs/least_squares_fit.h"
+#endif
 
 #define DEBUG_OUT ENABLED(DEBUG_LEVELING_FEATURE)
 #include "../../core/debug_out.h"
 
 #if ENABLED(Z_STEPPER_AUTO_ALIGN)
 
-
 #include "../../feature/z_stepper_align.h"
+
+#if HAS_MULTI_HOTEND
+  #include "../../module/tool_change.h"
+#endif
 
 #if ENABLED(Z_STEPPER_ALIGN_KNOWN_STEPPER_POSITIONS)
    #include "../../libs/least_squares_fit.h"
@@ -534,21 +544,14 @@ void GcodeSuite::M422() {
       do_blocking_move_to(safe_pos, MMM_TO_MMS(GANTRY_CALIBRATION_XY_PARK_FEEDRATE));
     #endif
 
-    const float move_distance = parser.intval('Z', GANTRY_CALIBRATION_EXTRA_HEIGHT),
-                   zpounce = (
-                     #if GANTRY_CALIBRATION_DIRECTION == 1
-                       (Z_MAX_POS) - move_distance
-                     #else
-                       (Z_MIN_POS) + move_distance
-                     #endif
-                   ),
-                   zgrind = (
-                     #if GANTRY_CALIBRATION_DIRECTION == 1
-                       (Z_MAX_POS) + move_distance
-                     #else
-                       (Z_MIN_POS) - move_distance
-                     #endif
-                   );
+    const float move_distance = parser.intval('Z', GANTRY_CALIBRATION_EXTRA_HEIGHT);
+    #if GANTRY_CALIBRATION_DIRECTION == 1
+      const float zpounce = Z_MAX_POS - move_distance;
+      const float zgrind = Z_MAX_POS + move_distance;
+    #else
+      const float zpounce = Z_MIN_POS - move_distance;
+      const float zgrind = Z_MIN_POS + move_distance;
+    #endif
 
     // Move Z to pounce position
     if (DEBUGGING(LEVELING)) DEBUG_ECHOLNPGM("Setting Z Pounce");
@@ -606,6 +609,11 @@ void GcodeSuite::M422() {
     if (DEBUGGING(LEVELING)) DEBUG_ECHOLNPGM("Z Backoff");
     do_blocking_move_to_z(zpounce, MMM_TO_MMS(GANTRY_CALIBRATION_FEEDRATE));
 
+    #if _REDUCE_CURRENT
+      if (DEBUGGING(LEVELING)) DEBUG_ECHOLNPGM("Restore Current");
+    #endif
+
+    if (DEBUGGING(LEVELING)) DEBUG_ECHOLNPGM("Restore Current");
     // Reset current to original values
 
     #if _REDUCE_CURRENT
