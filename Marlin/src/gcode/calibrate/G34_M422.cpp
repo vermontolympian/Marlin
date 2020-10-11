@@ -53,6 +53,10 @@
 
 #include "../../feature/z_stepper_align.h"
 
+#if HAS_MULTI_HOTEND
+  #include "../../module/tool_change.h"
+#endif
+
 #if ENABLED(Z_STEPPER_ALIGN_KNOWN_STEPPER_POSITIONS)
    #include "../../libs/least_squares_fit.h"
 #endif
