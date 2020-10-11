@@ -22,10 +22,6 @@
 
 #include "../../inc/MarlinConfigPre.h"
 
-#if ENABLED(Z_STEPPER_AUTO_ALIGN)
-
-#include "../../feature/z_stepper_align.h"
-
 #include "../gcode.h"
 #include "../../module/planner.h"
 #include "../../module/stepper.h"
@@ -54,7 +50,6 @@
 #include "../../core/debug_out.h"
 
 #if ENABLED(Z_STEPPER_AUTO_ALIGN)
-
 
 #include "../../feature/z_stepper_align.h"
 
