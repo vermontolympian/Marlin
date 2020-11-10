@@ -67,9 +67,9 @@
 //#define tallVersion // For 700mm version
 
 /**
- * Enable if you wish to change the auto level strategy to Unified Bed Leveling. Under CUSTOM COMMANDS, run Step 1 and 2 before setting Z Offset
+ * Enable if you wish to change the auto level strategy to Unified Bed Leveling.
  */
-//#define UBL //Disabled Firmware Retract and the animated boot screen
+//#define UBL //Disables Firmware Retract and the animated boot screen
 
 //ONLY MAKE CHANGES ABOVE FOR RELIABLE FUNCTION
 //ONLY MAKE CHANGES ABOVE FOR RELIABLE FUNCTION
@@ -698,10 +698,14 @@
 
   //120V 250W silicone heater into 4mm borosilicate (MendelMax 1.5+)
   //from FOPDT model - kp=.39 Tp=405 Tdead=66, Tc set to 79.2, aggressive factor of .15 (vs .1, 1, 10)
-  #if(ENABLED(BED_AC))
+  #if ENABLED(BED_AC)
     #define  DEFAULT_bedKp 100.0
     #define  DEFAULT_bedKi 15.0
     #define  DEFAULT_bedKd 200.0
+  #elif ENABLED(RAPTOR2)
+    #define  DEFAULT_bedKp 145.5
+    #define  DEFAULT_bedKi 17.59
+    #define  DEFAULT_bedKd 802.7
   #else
     #define DEFAULT_bedKp 10.00
     #define DEFAULT_bedKi .023
