@@ -782,37 +782,6 @@
   #define HOME_AFTER_G34
 #endif
 
-/**
- * Modern replacement for the Prusa TMC_Z_CALIBRATION
- * Adds capability to work with any adjustable current drivers
- * Implements as G34 as M915 is deprecated
- */
-
-#define MECHANICAL_GANTRY_CALIBRATION
-#if ENABLED(MECHANICAL_GANTRY_CALIBRATION)
-
-  #if ENABLED(Mini)
-    #define GANTRY_CALIBRATION_CURRENT   900                   // Default calibration current in ma - PWM
-  #elif ANY(Taz6, Workhorse)
-    #define GANTRY_CALIBRATION_CURRENT   120                   // Default calibration current in ma - DIGIPOTSS
-  #elif ANY(MiniV2, TazPro)
-    #define GANTRY_CALIBRATION_CURRENT   600                   // Default calibration current in ma - TMC
-  #endif
-  #define GANTRY_CALIBRATION_EXTRA_HEIGHT      15                   // Extra distance in mm past Z_###_POS to move
-  #if ENABLED(MiniV2)
-    #define GANTRY_CALIBRATION_DIRECTION          0                   // Set to 1 for Max or 0 for min
-  #else
-    #define GANTRY_CALIBRATION_DIRECTION          1                   // Set to 1 for Max or 0 for min
-  #endif
-
-  #define GANTRY_CALIBRATION_FEEDRATE         500                   // Feedrate for correction move
-
-  #define GANTRY_CALIBRATION_SAFE_POSITION  {X_CENTER, Y_MIN}  // Safe position for nozzle
-  #define GANTRY_CALIBRATION_XY_PARK_FEEDRATE 3000                // XY Park Feedrate - MMM
-  //#define GANTRY_CALIBRATION_COMMANDS_PRE   ""
-  #define GANTRY_CALIBRATION_COMMANDS_POST  "G28"
-#endif
-
 //
 // Add the G35 command to read bed corners to help adjust screws. Requires a bed probe.
 //
@@ -3550,23 +3519,36 @@
 #endif
 
 /**
- * Mechanical Gantry Calibration
- * Modern replacement for the Prusa TMC_Z_CALIBRATION.
- * Adds capability to work with any adjustable current drivers.
- * Implemented as G34 because M915 is deprecated.
+ * Modern replacement for the Prusa TMC_Z_CALIBRATION
+ * Adds capability to work with any adjustable current drivers
+ * Implements as G34 as M915 is deprecated
  */
-//#define MECHANICAL_GANTRY_CALIBRATION
-#if ENABLED(MECHANICAL_GANTRY_CALIBRATION)
-  #define GANTRY_CALIBRATION_CURRENT          600     // Default calibration current in ma
-  #define GANTRY_CALIBRATION_EXTRA_HEIGHT      15     // Extra distance in mm past Z_###_POS to move
-  #define GANTRY_CALIBRATION_FEEDRATE         500     // Feedrate for correction move
-  //#define GANTRY_CALIBRATION_TO_MIN                 // Enable to calibrate Z in the MIN direction
 
-  //#define GANTRY_CALIBRATION_SAFE_POSITION  { X_CENTER, Y_CENTER } // Safe position for nozzle
-  //#define GANTRY_CALIBRATION_XY_PARK_FEEDRATE 3000  // XY Park Feedrate - MMM
+#define MECHANICAL_GANTRY_CALIBRATION
+#if ENABLED(MECHANICAL_GANTRY_CALIBRATION)
+
+  #if ENABLED(Mini)
+    #define GANTRY_CALIBRATION_CURRENT   900                   // Default calibration current in ma - PWM
+  #elif ANY(Taz6, Workhorse)
+    #define GANTRY_CALIBRATION_CURRENT   120                   // Default calibration current in ma - DIGIPOTSS
+  #elif ANY(MiniV2, TazPro)
+    #define GANTRY_CALIBRATION_CURRENT   600                   // Default calibration current in ma - TMC
+  #endif
+  #define GANTRY_CALIBRATION_EXTRA_HEIGHT      15                   // Extra distance in mm past Z_###_POS to move
+  #if ENABLED(MiniV2)
+    #define GANTRY_CALIBRATION_DIRECTION          0                   // Set to 1 for Max or 0 for min
+  #else
+    #define GANTRY_CALIBRATION_DIRECTION          1                   // Set to 1 for Max or 0 for min
+  #endif
+
+  #define GANTRY_CALIBRATION_FEEDRATE         500                   // Feedrate for correction move
+
+  #define GANTRY_CALIBRATION_SAFE_POSITION  {X_CENTER, Y_MIN}  // Safe position for nozzle
+  #define GANTRY_CALIBRATION_XY_PARK_FEEDRATE 3000                // XY Park Feedrate - MMM
   //#define GANTRY_CALIBRATION_COMMANDS_PRE   ""
-  #define GANTRY_CALIBRATION_COMMANDS_POST  "G28"     // G28 highly recommended to ensure an accurate position
+  #define GANTRY_CALIBRATION_COMMANDS_POST  "G28"
 #endif
+
 
 /**
  * MAX7219 Debug Matrix
