@@ -47,7 +47,13 @@
 #define BED_AC
 
 //#define HotendAllMetal
-//#define HotendMosquito
+//#define HotendMosquito // High Tenp Slice Thermistor
+//#define HotendSemitec //E3D or SLice 300C Thermistor
+//#define HotendSlicePT1000
+//#define HotendCreality
+
+//#define HighPoweredHeater
+//#define ExtruderDDX //DDX kit with Linear Rail
 //#define ExtruderBMG
 
 /**
@@ -524,12 +530,15 @@
  *   998 : Dummy Table that ALWAYS reads 25°C or the temperature defined below.
  *   999 : Dummy Table that ALWAYS reads 100°C or the temperature defined below.
  */
+
 #if ENABLED(HotendMosquito)
   #define TEMP_SENSOR_0 67
-#elif ENABLED(RAPTOR2)
-  #define TEMP_SENSOR_0 61
-#elif ENABLED(E3DHemeraExtruder)
+#elif ANY(E3DHemeraExtruder, HotendSemitec)
   #define TEMP_SENSOR_0 5
+#elif ENABLED(HotendSlicePT1000)
+  #define TEMP_SENSOR_0 1047
+#elif ENABLED(RAPTOR2) && DISABLED(HotendCreality)
+  #define TEMP_SENSOR_0 61
 #else
   #define TEMP_SENSOR_0 1
 #endif
@@ -586,9 +595,11 @@
 // Above this temperature the heater will be switched off.
 // This can protect components from overheating, but NOT from shorts and failures.
 // (Use MINTEMP for thermistor short/failure protection.)
-#if ENABLED(HotendMosquito)
+
+
+#if ANY(HotendMosquito, HotendSlicePT1000)
   #define HEATER_0_MAXTEMP 450
-#elif ENABLED(RAPTOR2)
+#elif ENABLED(RAPTOR2) && NONE(HotendCreality, HotendSemitec, E3DHemeraExtruder)
   #define HEATER_0_MAXTEMP 345
 #else
   #define HEATER_0_MAXTEMP 305
@@ -936,6 +947,12 @@
     #define E_STEPSMM 409
   #else
     #define E_STEPSMM 818
+  #endif
+#elif ANY(ExtruderBMG, ExtruderDDX)
+  #if ANY(E_2208, E_4988, E_2209_Uart)
+    #define E_STEPSMM 415
+  #else
+    #define E_STEPSMM 830
   #endif
 #else
   #if ANY(E_2208, E_4988, E_2209_Uart)
@@ -1387,14 +1404,18 @@
 #else
   #define X_BED_SIZE 400
 #endif
-#define Y_BED_SIZE 400
+#if ENABLED(ExtruderDDX)
+  #define Y_BED_SIZE 380
+#else
+  #define Y_BED_SIZE 400
+#endif
 
 // Travel limits (mm) after homing, corresponding to endstop positions.
 #define X_MIN_POS 0
 #define Y_MIN_POS 0
 #define Z_MIN_POS 0
 #define X_MAX_POS X_BED_SIZE
-#define Y_MAX_POS Y_BED_SIZE
+#define Y_MAX_POS 400
 #if(ENABLED(tallVersion))
   #define Z_MAX_POS 700
 #else
