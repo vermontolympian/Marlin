@@ -39,7 +39,7 @@ static void config_prefix(PGM_P const name, PGM_P const pref=nullptr, const int8
   serialprintPGM(name);
   SERIAL_CHAR(':');
 }
-static void config_line(PGM_P const name, const float val, PGM_P const pref=nullptr, , const int8_t ind=-1) {
+static void config_line(PGM_P const name, const float val, PGM_P const pref=nullptr, const int8_t ind=-1) {
   config_prefix(name, pref, ind);
   SERIAL_ECHOLN(val);
 }
@@ -174,7 +174,7 @@ void GcodeSuite::M360() {
   config_line(PSTR("NumExtruder"), EXTRUDERS);
   #if EXTRUDERS
     LOOP_L_N(e, EXTRUDERS) {
-      config_line_e(e, TERN(HAS_LINEAR_E_JERK, planner.max_e_jerk[E_INDEX_N(e)], TERN(HAS_CLASSIC_JERK, planner.max_jerk.e, DEFAULT_EJERK)), E_JERK_VAL(e));
+      config_line_e(e, JERK_STR, TERN(HAS_LINEAR_E_JERK, planner.max_e_jerk[E_INDEX_N(e)], TERN(HAS_CLASSIC_JERK, planner.max_jerk.e, DEFAULT_EJERK)));
       config_line_e(e, PSTR("MaxSpeed"), planner.settings.max_feedrate_mm_s[E_AXIS_N(e)]);
       config_line_e(e, PSTR("Acceleration"), planner.settings.max_acceleration_mm_per_s2[E_AXIS_N(e)]);
       config_line_e(e, PSTR("Diameter"), TERN(NO_VOLUMETRICS, DEFAULT_NOMINAL_FILAMENT_DIA, planner.filament_size[e]));
