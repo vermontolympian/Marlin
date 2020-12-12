@@ -1067,6 +1067,10 @@
 //#define PROBING_STEPPERS_OFF      // Turn steppers off (unless needed to hold position) when probing
 //#define DELAY_BEFORE_PROBING 200  // (ms) To prevent vibrations from triggering piezo sensors
 
+// Require minimum nozzle or bed temperature for probing. Currently applies only to the first extruder.
+//#define PROBE_REQUIRES_MINTEMP_NOZZLE 150
+//#define PROBE_REQUIRES_MINTEMP_BED     50
+
 // For Inverting Stepper Enable Pins (Active Low) use 0, Non Inverting (Active High) use 1
 // :{ 0:'Low', 1:'High' }
 #define X_ENABLE_ON 0
@@ -1655,6 +1659,13 @@
 
   // For a purge/clean station mounted on the X axis
   //#define NOZZLE_CLEAN_NO_Y
+
+  //#define NOZZLE_CLEAN_MIN_TEMP
+  #if ENABLED(NOZZLE_CLEAN_MIN_TEMP)
+    #define NOZZLE_CLEAN_TEMP  170
+    // Heat nozzle if temperature is too low. Default behavior is to skip cleaning.
+    //#define NOZZLE_CLEAN_HEAT_LOWTEMP
+  #endif
 
   // Explicit wipe G-code script applies to a G12 with no arguments.
   //#define WIPE_SEQUENCE_COMMANDS "G1 X-17 Y25 Z10 F4000\nG1 Z1\nM114\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 Z15\nM400\nG0 X-10.0 Y-9.0"
