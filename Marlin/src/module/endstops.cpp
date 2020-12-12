@@ -280,6 +280,14 @@ void Endstops::init() {
     #endif
   #endif
 
+  #if PIN_EXISTS(PROBE_ACTIVE_INPUT)
+    SET_INPUT(PROBE_ACTIVE_INPUT_PIN);
+  #endif
+
+  #if ENABLED(PROBE_TARE)
+    probe.tare_z_probe();
+  #endif
+
   TERN_(ENDSTOP_INTERRUPTS_FEATURE, setup_endstop_interrupts());
 
   // Enable endstops
@@ -582,7 +590,7 @@ void Endstops::update() {
     #endif
   #endif
 
-  #if HAS_Z_MIN && !Z_SPI_SENSORLESS
+  #if HAS_Z_MIN && NONE(Z_SPI_SENSORLESS, Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN)
     UPDATE_ENDSTOP_BIT(Z, MIN);
     #if ENABLED(Z_MULTI_ENDSTOPS)
       #if HAS_Z2_MIN
@@ -607,10 +615,12 @@ void Endstops::update() {
     #endif
   #endif
 
-  // When closing the gap check the enabled probe
-  #if HAS_CUSTOM_PROBE_PIN
-    UPDATE_ENDSTOP_BIT(Z, MIN_PROBE);
+  #if ENABLED(PROBE_ACTIVE_INPUT)
+    if (READ(PROBE_ACTIVE_INPUT_PIN) == PROBE_ACTIVE_INPUT_STATE)
   #endif
+    {
+      UPDATE_ENDSTOP_BIT(Z, TERN(HAS_CUSTOM_PROBE_PIN, MIN_PROBE, MIN));
+    }
 
   #if HAS_Z_MAX && !Z_SPI_SENSORLESS
     // Check both Z dual endstops

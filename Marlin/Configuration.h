@@ -1006,6 +1006,29 @@
 // Feedrate (mm/min) for the "accurate" probe of each point
 #define Z_PROBE_SPEED_SLOW (Z_PROBE_SPEED_FAST / 2)
 
+// Fail to probe if the probe does not indicate itself as active.
+// This may be a switch indicating proper deployment, or an optical switch to report the carriage is near the bed.
+//#define PROBE_ACTIVE_INPUT
+#if ENABLED(PROBE_ACTIVE_INPUT)
+  #define PROBE_ACTIVE_INPUT_STATE LOW // State indicating probe is active
+  //#define PROBE_ACTIVE_INPUT_PIN PC6 // Override default pin
+#endif
+
+// Probe should be tared prior to each probe
+// Useful for strain or piezo sensors which must exclude strain such
+// as that from cables or bowden cables pulling on the carriage.
+//#define PROBE_TARE
+#if ENABLED(PROBE_TARE)
+  #define PROBE_TARE_TIME  200    // Time to hold tare pin (milliseconds)
+  #define PROBE_TARE_DELAY 200    // Delay after tare before (milliseconds)
+  #define PROBE_TARE_STATE HIGH   // State to write pin for tare
+  //#define PROBE_TARE_PIN PA5    // Override default pin
+  #if ENABLED(PROBE_ACTIVE_INPUT)
+    // Fail to tare/probe if PROBE_ACTIVE_INPUT reports the probe to be active
+    //#define PROBE_TARE_ONLY_WHILE_INACTIVE
+  #endif
+#endif
+
 /**
  * Multiple Probing
  *
