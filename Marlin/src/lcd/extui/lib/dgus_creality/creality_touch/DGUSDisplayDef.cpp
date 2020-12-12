@@ -361,7 +361,7 @@ const struct VPMapping VPMap[] PROGMEM = {
   { DGUSLCD_SCREEN_TEMP_PLA, VPList_PreheatPLASettings },
   { DGUSLCD_SCREEN_TEMP_ABS, VPList_PreheatABSSettings },
 
-  { DGUSLCD_SCREEN_INFO, VPList_PrintScreen },
+  { DGUSLCD_SCREEN_INFO, VPList_Info },
   { DGUSLCD_SCREEN_ZOFFSET_LEVEL, VPList_ZOffsetLevel },
   { DGUSLCD_SCREEN_LEVELING, VPList_Leveling },
 

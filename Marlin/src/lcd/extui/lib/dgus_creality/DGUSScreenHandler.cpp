@@ -43,6 +43,12 @@
 #include "../../../../module/printcounter.h"
 #include "../../../../feature/caselight.h"
 
+#define	MACVERSION		STRING_CONFIG_H_AUTHOR
+#define	SOFTVERSION		SHORT_BUILD_VERSION
+#define MAC_LENGTH              X_BED_SIZE
+#define MAC_WIDTH               Y_BED_SIZE
+#define MAC_HEIGHT              Z_MAX_POS
+
 #if ENABLED(POWER_LOSS_RECOVERY)
   #include "../../../../feature/powerloss.h"
 #endif

@@ -145,7 +145,7 @@ bool hasPrintTimer = false;
   void onPrintFinished() {
     ScreenHandler.OnPrintFinished();
   }
-  
+
   void onStoreSettings(char *buff) {
     // Called when saving to EEPROM (i.e. M500). If the ExtUI needs
     // permanent data to be stored, it can write up to eeprom_data_size bytes

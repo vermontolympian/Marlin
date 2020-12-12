@@ -70,13 +70,8 @@
 // @section info
 
 // Author info of this build printed to the host during boot and M115
-#define STRING_CONFIG_H_AUTHOR "CR-6 SE" // Who made the changes.
+#define STRING_CONFIG_H_AUTHOR "Tinymachines" // Who made the changes.
 #define CUSTOM_VERSION_FILE Version.h // Path from the root directory (no quotes)
-#define	MACVERSION		STRING_CONFIG_H_AUTHOR
-#define	SOFTVERSION		SHORT_BUILD_VERSION
-#define MAC_LENGTH              235
-#define MAC_WIDTH               235
-#define MAC_HEIGHT              250
 
 /**
  * *** VENDORS PLEASE READ ***
@@ -886,16 +881,6 @@
 #define NOZZLE_AS_PROBE
 
 /**
- * Auto-leveling needs preheating
- */
-#define AUTOLEVEL_NEEDS_PREHEATING
-
-#if ENABLED(AUTOLEVEL_NEEDS_PREHEATING)
-  #define AUTOLEVEL_PREHEAT_NOZZLE_TEMP 120
-  #define AUTOLEVEL_PREHEAT_BED_TEMP 50
-#endif
-
-/**
  * Z Servo Probe, such as an endstop switch on a rotating arm.
  */
 //#define Z_PROBE_SERVO_NR 0       // Defaults to SERVO 0 connector.
@@ -1070,6 +1055,10 @@
 //#define PROBING_FANS_OFF          // Turn fans off when probing
 //#define PROBING_STEPPERS_OFF      // Turn steppers off (unless needed to hold position) when probing
 //#define DELAY_BEFORE_PROBING 200  // (ms) To prevent vibrations from triggering piezo sensors
+
+// Require minimum nozzle or bed temperature for probing. Currently applies only to the first extruder.
+#define PROBE_REQUIRES_MINTEMP_NOZZLE 170
+#define PROBE_REQUIRES_MINTEMP_BED     50
 
 // For Inverting Stepper Enable Pins (Active Low) use 0, Non Inverting (Active High) use 1
 // :{ 0:'Low', 1:'High' }
@@ -1610,6 +1599,13 @@
 
   // For a purge/clean station mounted on the X axis
   //#define NOZZLE_CLEAN_NO_Y
+
+  //#define NOZZLE_CLEAN_MIN_TEMP
+  #if ENABLED(NOZZLE_CLEAN_MIN_TEMP)
+    #define NOZZLE_CLEAN_TEMP  170
+    // Heat nozzle if temperature is too low. Default behavior is to skip cleaning.
+    //#define NOZZLE_CLEAN_HEAT_LOWTEMP
+  #endif
 
   // Explicit wipe G-code script applies to a G12 with no arguments.
   //#define WIPE_SEQUENCE_COMMANDS "G1 X-17 Y25 Z10 F4000\nG1 Z1\nM114\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 X-17 Y25\nG1 X-17 Y95\nG1 Z15\nM400\nG0 X-10.0 Y-9.0"
