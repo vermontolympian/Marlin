@@ -163,13 +163,22 @@ void PrintRunningMenuHandler(DGUS_VP_Variable &var, unsigned short buttonValue) 
 void PrintPausedMenuHandler(DGUS_VP_Variable &var, unsigned short buttonValue) {
     switch (var.VP) {
         case VP_BUTTON_RESUMEPRINTKEY:
-#if ENABLED(FILAMENT_RUNOUT_SENSOR)
+          //SERIAL_ECHOLN("Handling VP_BUTTON_RESUMEPRINTKEY");
+          #if ENABLED(FILAMENT_RUNOUT_SENSOR)
             runout.reset();
-#endif
-
-            if (!ScreenHandler.HandlePendingUserConfirmation()) {
-                ExtUI::resumePrint();
-                ScreenHandler.GotoScreen(DGUSLCD_SCREEN_PRINT_RUNNING);
+            //SERIAL_ECHOLN("Runout Reset");
+          #endif
+            if(ExtUI::isWaitingOnUser()) {
+              ScreenHandler.HandlePendingUserConfirmation();
+              //SERIAL_ECHOLN("User Confirmed");
+            }
+            else if(ExtUI::isPrintingFromMediaPaused()) {
+              //SERIAL_ECHOLN("SD Resume");
+              ExtUI::resumePrint();
+            }
+            //SERIAL_ECHOLN("Reasons handled");
+            if(!ExtUI::isMoving()) {
+              ScreenHandler.GotoScreen(DGUSLCD_SCREEN_PRINT_RUNNING);
             }
             break;
     }

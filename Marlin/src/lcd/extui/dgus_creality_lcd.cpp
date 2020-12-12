@@ -182,16 +182,10 @@ bool hasPrintTimer = false;
     }
 
     void onMeshUpdate(const int8_t xpos, const int8_t ypos, const float zval) {
-    }
-
-    void onMeshUpdate(const int8_t xpos, const int8_t ypos, const ExtUI::probe_state_t state) {
-    }
-
-    void onMeshCallback(const int8_t xpos, const int8_t ypos, const float zval) {
       ScreenHandler.OnMeshLevelingUpdate(xpos, ypos);
     }
 
-    void onMeshCallback(const int8_t xpos, const int8_t ypos, const ExtUI::probe_state_t state) {
+    void onMeshUpdate(const int8_t xpos, const int8_t ypos, const ExtUI::probe_state_t state) {
       // Only called for UBL
       if (state == MESH_START) {
         ScreenHandler.OnMeshLevelingStart();
@@ -199,6 +193,8 @@ bool hasPrintTimer = false;
 
       ScreenHandler.OnMeshLevelingUpdate(xpos, ypos);
     }
+
+
   #endif
 
   #if ENABLED(POWER_LOSS_RECOVERY)

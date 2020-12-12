@@ -453,13 +453,6 @@ bool DGUSScreenHandler::HandlePendingUserConfirmation() {
     return false;
   }
 
-  // Switch to the resume screen
-  ScreenHandler.GotoScreen(DGUSLCD_SCREEN_PRINT_RUNNING);
-  while (!ScreenHandler.loop());  // Wait while anything is left to be sent
-
-  // Give DWIN a chance to catch up
-  delay(250);
-
   // We might be re-entrant here
   ExtUI::setUserConfirmed();
 
