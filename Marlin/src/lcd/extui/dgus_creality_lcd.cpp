@@ -84,7 +84,7 @@ bool hasPrintTimer = false;
 
   void onPrintTimerPaused() {
     // Handle M28 Pause SD print - But only if we're not waiting on a user
-    if (ExtUI::isPrintingFromMediaPaused() && ScreenHandler.getCurrentScreen() == DGUSLCD_SCREEN_PRINT_RUNNING) {
+    if (ExtUI::isPrintingFromMediaPaused() && ScreenHandler.getCurrentScreen() == DGUSLCD_SCREEN_PRINT_RUNNING && !ExtUI::isWaitingOnUser()) {
       ScreenHandler.GotoScreen(DGUSLCD_SCREEN_PRINT_PAUSED);
     }
   }
@@ -112,20 +112,20 @@ bool hasPrintTimer = false;
       ScreenHandler.setstatusmessagePGM(msg);
       ScreenHandler.sendinfoscreen(PSTR("Confirmation required"), msg, NUL_STR, NUL_STR, true, true, false, true);
 
-      if (hasPrintTimer) {
-        ScreenHandler.GotoScreen(DGUSLCD_SCREEN_PRINT_PAUSED);
-      } else {
+      //if (hasPrintTimer) {
+      //  ScreenHandler.GotoScreen(DGUSLCD_SCREEN_PRINT_PAUSED);
+      //} else {
         ScreenHandler.GotoScreen(DGUSLCD_SCREEN_POPUP);
-      }
+     // }
     }
-    else if (ScreenHandler.getCurrentScreen() == DGUSLCD_SCREEN_POPUP) {
-      DEBUG_ECHOLNPAIR("User confirmation canceled");
+    //else if (ScreenHandler.getCurrentScreen() == DGUSLCD_SCREEN_POPUP) {
+    //  DEBUG_ECHOLNPAIR("User confirmation canceled");
 
-      ScreenHandler.setstatusmessagePGM(nullptr);
-      ScreenHandler.PopToOldScreen();
-    }
+    //  ScreenHandler.setstatusmessagePGM(nullptr);
+    //  ScreenHandler.PopToOldScreen();
+   // }
 
-    while (!ScreenHandler.loop());  // Wait while anything is left to be sent
+    //while (!ScreenHandler.loop());  // Wait while anything is left to be sent
   }
 
   void onStatusChanged(const char * const msg) { ScreenHandler.setstatusmessage(msg); }

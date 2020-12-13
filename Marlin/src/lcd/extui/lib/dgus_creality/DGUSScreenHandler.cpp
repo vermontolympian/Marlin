@@ -1129,11 +1129,11 @@ bool DGUSScreenHandler::loop() {
   const millis_t ms = millis();
   static millis_t next_event_ms = 0;
 
-  if (wait_for_user && current_screen != DGUSLCD_SCREEN_POPUP) {
+  if (ExtUI::isWaitingOnUser() && current_screen != DGUSLCD_SCREEN_POPUP) {
     // In some occassions the display needs more time to handle a screen change, for instance,
     // with ADVANCED_PAUSE_FEATURE, the calls to ExtUI::onUserConfirmRequired are quite fast
     DEBUG_ECHOLN("Nudging the display to update the current screen...");
-    GotoScreen(current_screen, true);
+    GotoScreen(DGUSLCD_SCREEN_PRINT_PAUSED, true);
   }
 
   if (!IsScreenComplete() || ELAPSED(ms, next_event_ms)) {
