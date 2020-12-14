@@ -337,7 +337,6 @@ const struct VPMapping VPMap[] PROGMEM = {
   { DGUSLCD_SCREEN_MAIN, VPList_Main },
 
   { DGUSLCD_SCREEN_SDFILELIST, VPList_SDFileList },
-
   { DGUSLCD_SCREEN_FILAMENTRUNOUT1, VPList_PrintPausingError },
   { DGUSLCD_SCREEN_FILAMENTRUNOUT2, VPList_PrintPausingError },
 
@@ -370,7 +369,7 @@ const struct VPMapping VPMap[] PROGMEM = {
   { DGUSLCD_SCREEN_HEATING_FAILED, VPList_None },
   { DGUSLCD_SCREEN_THERMISTOR_ERROR, VPList_None },
 
-  { DGUSLCD_SCREEN_AUTOHOME, VPList_None },
+  { DGUSLCD_SCREEN_AUTOHOME, VPList_PrintScreen },
 
   { DGUSLCD_SCREEN_DIALOG_PAUSE, VPList_None },
   { DGUSLCD_SCREEN_DIALOG_STOP, VPList_DialogStop },
