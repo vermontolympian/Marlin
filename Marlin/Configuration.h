@@ -1008,7 +1008,7 @@
 // as that from cables or bowden cables pulling on the carriage.
 #define PROBE_TARE
 #if ENABLED(PROBE_TARE)
-  #define PROBE_TARE_TIME  100    // Time to hold tare pin (milliseconds)
+  #define PROBE_TARE_TIME  200    // Time to hold tare pin (milliseconds)
   #define PROBE_TARE_DELAY 200    // Delay after tare before (milliseconds)
   #define PROBE_TARE_STATE LOW   // State to write pin for tare
   //#define PROBE_TARE_PIN PA5    // Override default pin
@@ -1072,7 +1072,7 @@
  * These options are most useful for the BLTouch probe, but may also improve
  * readings with inductive probes and piezo sensors.
  */
-#define PROBING_HEATERS_OFF       // Turn heaters off when probing
+//#define PROBING_HEATERS_OFF       // Turn heaters off when probing
 #if ENABLED(PROBING_HEATERS_OFF)
   #define WAIT_FOR_BED_HEATER     // Wait for bed to heat back up between probes (to improve accuracy)
 #endif
