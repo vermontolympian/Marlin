@@ -47,7 +47,7 @@ namespace ExtUI {
   void onIdle() { ScreenHandler.loop(); }
 
   void onPrinterKilled(PGM_P const error, PGM_P const component) {
-    ScreenHandler.sendinfoscreen(GET_TEXT(MSG_HALTED), error, GET_TEXT(MSG_PLEASE_RESET), NUL_STR, true, true, true, true);
+    ScreenHandler.sendinfoscreen(GET_TEXT(MSG_HALTED), error, GET_TEXT(MSG_PLEASE_RESET), GET_TEXT(MSG_PLEASE_RESET), true, true, true, true);
 
     if (strcmp_P(error, GET_TEXT(MSG_ERR_MAXTEMP)) == 0 || strcmp_P(error, GET_TEXT(MSG_THERMAL_RUNAWAY)) == 0)     {
       ScreenHandler.GotoScreen(DGUSLCD_SCREEN_THERMAL_RUNAWAY);
@@ -110,7 +110,7 @@ bool hasPrintTimer = false;
       DEBUG_ECHOLNPAIR("User confirmation requested: ", msg);
 
       ScreenHandler.setstatusmessagePGM(msg);
-      ScreenHandler.sendinfoscreen(PSTR("Confirmation required"), msg, NUL_STR, NUL_STR, true, true, false, true);
+      ScreenHandler.sendinfoscreen(PSTR("Confirmation required"), msg, NUL_STR, PSTR("Ok"), true, true, false, true);
 
       //if (hasPrintTimer) {
       //  ScreenHandler.GotoScreen(DGUSLCD_SCREEN_PRINT_PAUSED);

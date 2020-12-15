@@ -98,8 +98,8 @@ constexpr uint16_t VP_MSGSTR2 = 0x2030;
 constexpr uint8_t VP_MSGSTR2_LEN = 0x40;
 constexpr uint16_t VP_MSGSTR3 = 0x2070;
 constexpr uint8_t VP_MSGSTR3_LEN = 0x40;
-//constexpr uint16_t VP_MSGSTR4 = 0x11C0;
-// constexpr uint8_t VP_MSGSTR4_LEN = 0x20;
+constexpr uint16_t VP_MSGSTR4 = 0x11C0;
+constexpr uint8_t VP_MSGSTR4_LEN = 0x20;
 
 // // Screenchange request for screens that only make sense when printer is idle.
 // // e.g movement is only allowed if printer is not printing.
