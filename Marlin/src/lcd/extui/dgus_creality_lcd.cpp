@@ -174,6 +174,26 @@ bool hasPrintTimer = false;
   void onConfigurationStoreRead(bool success) {
     // Called after the entire EEPROM has been read,
     // whether successful or not.
+    #if HAS_MESH
+      if (ExtUI::getMeshValid())
+      {
+        uint8_t abl_probe_index = 0;
+          for(uint8_t outer = 0; outer < GRID_MAX_POINTS_Y; outer++)
+          {
+            for (uint8_t inner = 0; inner < GRID_MAX_POINTS_X; inner++)
+            {
+              uint8_t x_Point = inner;
+              bool zig = (outer & 1);
+              if (zig) x_Point = (GRID_MAX_POINTS_X - 1) - inner;
+              xy_uint8_t point = {x_Point, outer};
+              dgusdisplay.WriteVariable( (VP_MESH_VALUE_START + (abl_probe_index * 2)), static_cast<uint16_t>(ExtUI::getMeshPoint(point) * 1000));
+              ++abl_probe_index;
+            }
+          }
+
+        setLevelingActive(true);
+      }
+    #endif
   }
 
   #if HAS_MESH

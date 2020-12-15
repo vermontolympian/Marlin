@@ -497,6 +497,21 @@ void DGUSScreenHandler::OnMeshLevelingUpdate(const int8_t xpos, const int8_t ypo
   // Update icon
   dgusdisplay.WriteVariable(VP_MESH_LEVEL_STATUS, static_cast<uint16_t>(MeshLevelIndex));
 
+  uint8_t abl_probe_index = 0;
+  for(uint8_t outer = 0; outer < GRID_MAX_POINTS_Y; outer++)
+  {
+    for (uint8_t inner = 0; inner < GRID_MAX_POINTS_X; inner++)
+    {
+      uint8_t x_Point = inner;
+      bool zig = (outer & 1); // != ((PR_OUTER_END) & 1);
+      if (zig) x_Point = (GRID_MAX_POINTS_X - 1) - inner;
+      xy_uint8_t point = {x_Point, outer};
+      if(x_Point==xpos && outer ==ypos)
+        dgusdisplay.WriteVariable( (VP_MESH_VALUE_START + (abl_probe_index * 2)), static_cast<uint16_t>(ExtUI::getMeshPoint(point) * 1000));
+      ++abl_probe_index;
+    }
+  }
+
   if (MeshLevelIndex == GRID_MAX_POINTS) {
     // Done
     thermalManager.disable_all_heaters();
@@ -504,8 +519,6 @@ void DGUSScreenHandler::OnMeshLevelingUpdate(const int8_t xpos, const int8_t ypo
     settings.save();
 
     GotoScreen(DGUSLCD_SCREEN_ZOFFSET_LEVEL);
-  } else {
-    // We've already updated the icon, so nothing left
   }
 }
 

@@ -338,6 +338,7 @@ constexpr uint16_t VP_LED_TOGGLE = 0x101F;
 constexpr uint16_t VP_STEPPERS = 0x1200;
 constexpr uint16_t VP_MESH_LEVEL_TEMP = 0x108A;
 constexpr uint16_t VP_MESH_LEVEL_STATUS = 0x108D;
+constexpr uint16_t VP_MESH_VALUE_START = 0x1300;
 constexpr uint16_t VP_FEED_AMOUNT = 0x1054;
 constexpr uint16_t VP_FEED_PROGRESS = 0x108e;
 
