@@ -211,6 +211,12 @@ public:
     }
   }
 
+  template<unsigned int decimals>
+  static void DGUSLCD_SendFloatAsLongValueToDisplay(uint16_t vp, float var) {
+    var *= cpow(10, decimals);
+    dgusdisplay.WriteVariable(vp, (long)var);
+  }
+
   // Send an icon to the display, depending on whether it is true or false
   template<unsigned int value_if_true, unsigned int value_if_false>
   static void DGUSLCD_SendIconValue(DGUS_VP_Variable &var) {
@@ -232,6 +238,13 @@ public:
       f *= cpow(10, decimals);
       dgusdisplay.WriteVariable(var.VP, (int16_t)f);
     }
+  }
+
+  template<unsigned int decimals>
+  static void DGUSLCD_SendFloatAsIntValueToDisplay(uint16_t vp, float var) {
+    DEBUG_ECHOLNPAIR_F(" >> ", var, 6);
+    var *= cpow(10, decimals);
+    dgusdisplay.WriteVariable(vp, (int16_t)var);
   }
 
   /// Force an update of all VP on the current screen.

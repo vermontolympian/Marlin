@@ -493,6 +493,10 @@ void DGUSScreenHandler::OnMeshLevelingUpdate(const int8_t xpos, const int8_t ypo
   MeshLevelIndex++;
 
   DEBUG_ECHOLNPAIR("Mesh level index: ", MeshLevelIndex);
+  DEBUG_ECHOLNPAIR("Mesh X: ", xpos);
+  DEBUG_ECHOLNPAIR("Mesh Y: ", ypos);
+  xy_uint8_t pnt = {xpos, ypos};
+  DEBUG_ECHOLNPAIR("Mesh Val: ", ExtUI::getMeshPoint(pnt));
 
   // Update icon
   dgusdisplay.WriteVariable(VP_MESH_LEVEL_STATUS, static_cast<uint16_t>(MeshLevelIndex));
@@ -506,15 +510,19 @@ void DGUSScreenHandler::OnMeshLevelingUpdate(const int8_t xpos, const int8_t ypo
       bool zig = (outer & 1); // != ((PR_OUTER_END) & 1);
       if (zig) x_Point = (GRID_MAX_POINTS_X - 1) - inner;
       xy_uint8_t point = {x_Point, outer};
-      if(x_Point==xpos && outer ==ypos)
-        dgusdisplay.WriteVariable( (VP_MESH_VALUE_START + (abl_probe_index * 2)), static_cast<uint16_t>(ExtUI::getMeshPoint(point) * 1000));
+      if(x_Point==xpos && outer ==ypos) {
+        DEBUG_ECHOLNPAIR("Mesh adr: ", (VP_MESH_VALUE_START + (abl_probe_index * 4)));
+        DEBUG_ECHOLNPAIR("Mesh Val: ", ExtUI::getMeshPoint(point));
+        ScreenHandler.DGUSLCD_SendFloatAsLongValueToDisplay<3>((VP_MESH_VALUE_START + (abl_probe_index * 4)), ExtUI::getMeshPoint(point));
+      }
       ++abl_probe_index;
     }
   }
 
   if (MeshLevelIndex == GRID_MAX_POINTS) {
     // Done
-    thermalManager.disable_all_heaters();
+    if(!ExtUI::isPrinting())
+      thermalManager.disable_all_heaters();
 
     settings.save();
 

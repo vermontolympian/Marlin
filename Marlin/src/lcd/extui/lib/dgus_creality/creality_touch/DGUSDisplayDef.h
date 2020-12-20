@@ -98,7 +98,7 @@ constexpr uint16_t VP_MSGSTR2 = 0x2030;
 constexpr uint8_t VP_MSGSTR2_LEN = 0x40;
 constexpr uint16_t VP_MSGSTR3 = 0x2070;
 constexpr uint8_t VP_MSGSTR3_LEN = 0x40;
-constexpr uint16_t VP_MSGSTR4 = 0x11C0;
+constexpr uint16_t VP_MSGSTR4 = 0x2080;
 constexpr uint8_t VP_MSGSTR4_LEN = 0x20;
 
 // // Screenchange request for screens that only make sense when printer is idle.
@@ -194,7 +194,7 @@ constexpr uint16_t VP_PREHEAT_ABS_BED_TEMP = 0x110a;
 
 // // Place for status messages.
 constexpr uint16_t VP_M117 = 0x21B3;
-constexpr uint8_t VP_M117_LEN = 60;
+constexpr uint8_t VP_M117_LEN = 40;
 
 // // Temperatures.
 constexpr uint16_t VP_T_E0_Is = 0x1036;  // 4 Byte Integer - HEAD_CURRENT_TEMP_VP

@@ -186,7 +186,12 @@ bool hasPrintTimer = false;
               bool zig = (outer & 1);
               if (zig) x_Point = (GRID_MAX_POINTS_X - 1) - inner;
               xy_uint8_t point = {x_Point, outer};
-              dgusdisplay.WriteVariable( (VP_MESH_VALUE_START + (abl_probe_index * 2)), static_cast<uint16_t>(ExtUI::getMeshPoint(point) * 1000));
+
+              DEBUG_ECHOLNPAIR("Mesh X: ", x_Point);
+              DEBUG_ECHOLNPAIR("Mesh Y: ", outer);
+              DEBUG_ECHOLNPAIR("Mesh adr: ", (VP_MESH_VALUE_START + (abl_probe_index * 4)));
+              DEBUG_ECHOLNPAIR("Mesh Val: ", ExtUI::getMeshPoint(point));
+              ScreenHandler.DGUSLCD_SendFloatAsLongValueToDisplay<3>((VP_MESH_VALUE_START + (abl_probe_index * 4)), ExtUI::getMeshPoint(point));
               ++abl_probe_index;
             }
           }
@@ -227,22 +232,22 @@ bool hasPrintTimer = false;
 
   #if HAS_PID_HEATING
     void onPidTuning(const result_t rst) {
-      // Called for temperature PID tuning result
-      // switch (rst) {
-      //   case PID_BAD_EXTRUDER_NUM:
-      //     ScreenHandler.setstatusmessagePGM(GET_TEXT(MSG_PID_BAD_EXTRUDER_NUM));
-      //     break;
-      //   case PID_TEMP_TOO_HIGH:
-      //     ScreenHandler.setstatusmessagePGM(GET_TEXT(MSG_PID_TEMP_TOO_HIGH));
-      //     break;
-      //   case PID_TUNING_TIMEOUT:
-      //     ScreenHandler.setstatusmessagePGM(GET_TEXT(MSG_PID_TIMEOUT));
-      //     break;
-      //   case PID_DONE:
-      //     ScreenHandler.setstatusmessagePGM(GET_TEXT(MSG_PID_AUTOTUNE_DONE));
-      //     break;
-      // }
-      // ScreenHandler.GotoScreen(DGUSLCD_SCREEN_MAIN);
+       //Called for temperature PID tuning result
+       switch (rst) {
+         case PID_BAD_EXTRUDER_NUM:
+           ScreenHandler.setstatusmessagePGM(GET_TEXT(MSG_PID_BAD_EXTRUDER_NUM));
+           break;
+         case PID_TEMP_TOO_HIGH:
+           ScreenHandler.setstatusmessagePGM(GET_TEXT(MSG_PID_TEMP_TOO_HIGH));
+           break;
+         case PID_TUNING_TIMEOUT:
+           ScreenHandler.setstatusmessagePGM(GET_TEXT(MSG_PID_TIMEOUT));
+           break;
+         case PID_DONE:
+           ScreenHandler.setstatusmessagePGM(GET_TEXT(MSG_PID_AUTOTUNE_DONE));
+           break;
+       }
+       ScreenHandler.GotoScreen(DGUSLCD_SCREEN_MAIN);
     }
   #endif
 
