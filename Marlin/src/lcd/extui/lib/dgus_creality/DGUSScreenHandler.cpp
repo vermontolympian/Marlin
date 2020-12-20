@@ -1168,6 +1168,10 @@ bool DGUSScreenHandler::loop() {
   if (dgusdisplay.isInitialized()) {
     static bool booted = false;
     if (!booted) {
+      progmem_str message = GET_TEXT_F(WELCOME_MSG);
+      char buff[strlen_P((const char * const)message)+1];
+      strcpy_P(buff, (const char * const) message);
+      ExtUI::onStatusChanged((const char *)buff);
       int16_t percentage = static_cast<int16_t>(((float) ms / (float)BOOTSCREEN_TIMEOUT) * 100);
       if (percentage > 100) percentage = 100;
 
