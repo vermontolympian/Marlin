@@ -1078,9 +1078,9 @@ void DGUSScreenHandler::PopToOldScreen() {
   } else {
     if(ExtUI::isPrinting())
       GotoScreen(DGUSLCD_SCREEN_PRINT_RUNNING, false);
-  } else {
+    else
       GotoScreen(DGUSLCD_SCREEN_MAIN, false);
-    }
+  }
 }
 
 void DGUSScreenHandler::updateCurrentScreen(DGUSLCD_Screens current) {
