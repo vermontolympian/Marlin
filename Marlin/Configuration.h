@@ -11,10 +11,10 @@
 //#define STOCK_2208 // V2 Stock Board with TMC2208 Drivers
 //#define SKR13 // 32 bit board - assumes 2208 drivers
 //#define SKR14
-//#define SKR14Turbo
-//#define SKR_2209
+#define SKR14Turbo
+#define SKR_2209
 //#define E_8825
-//#define SKR_UART // Configure SKR board with drivers in UART mode
+#define SKR_UART // Configure SKR board with drivers in UART mode
 
 //#define SX2 // Small formfactor 200mm machine
 
@@ -471,7 +471,7 @@
   #define TEMP_SENSOR_0 1
 #endif
 #if ENABLED(SliceDualHeater)
-  #define TEMP_SENSOR_1 TEMP_SENSOR_0
+  #define TEMP_SENSOR_1 0
 #else
   #define TEMP_SENSOR_1 0
 #endif
@@ -498,7 +498,7 @@
 // Use temp sensor 1 as a redundant sensor with sensor 0. If the readings
 // from the two sensors differ too much the print will be aborted.
 #if ENABLED(SliceDualHeater)
-  #define TEMP_SENSOR_1_AS_REDUNDANT
+  //#define TEMP_SENSOR_1_AS_REDUNDANT
 #endif
 #define MAX_REDUNDANT_TEMP_SENSOR_DIFF 10
 
