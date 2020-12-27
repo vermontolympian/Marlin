@@ -128,7 +128,7 @@
 
 // Choose the name from boards.h that matches your setup
 #ifndef MOTHERBOARD
-  #define MOTHERBOARD BOARD_CREALITY_V452
+  #define MOTHERBOARD BOARD_CREALITY_V453
 #endif
 
 // Name displayed in the LCD "Ready" message and Info menu
@@ -1000,7 +1000,7 @@
 #define PROBE_ACTIVE_INPUT
 #if ENABLED(PROBE_ACTIVE_INPUT)
   #define PROBE_ACTIVE_INPUT_STATE LOW // State indicating probe is active
-  //#define PROBE_ACTIVE_INPUT_PIN PC6 // Override default pin
+  //#define PROBE_ENABLE_PIN PC6 // Override default pin
 #endif
 
 // Probe should be tared prior to each probe
