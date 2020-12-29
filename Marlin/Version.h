@@ -28,7 +28,7 @@
 /**
  * Marlin release version identifier
  */
-#define SHORT_BUILD_VERSION "TM3DMarlin2.0.7.2-CR6-A"
+#define SHORT_BUILD_VERSION "TM3D2.0.7.2-CR6-A"
 
 /**
  * Verbose version identifier which should contain a reference to the location
@@ -41,7 +41,7 @@
  * here we define this default string as the date where the latest release
  * version was tagged.
  */
-#define STRING_DISTRIBUTION_DATE "2020-12-12"
+#define STRING_DISTRIBUTION_DATE "2020-12-28"
 
 /**
  * Defines a generic printer name to be output to the LCD after booting Marlin.
@@ -65,7 +65,7 @@
  * The WEBSITE_URL is the location where users can get more information such as
  * documentation about a specific Marlin release.
  */
-//#define WEBSITE_URL "https://marlinfw.org"
+#define WEBSITE_URL "tinymachines3d.com"
 
 /**
  * Set the vendor info the serial USB interface, if changable

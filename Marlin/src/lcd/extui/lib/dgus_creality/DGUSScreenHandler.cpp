@@ -165,8 +165,10 @@ void DGUSScreenHandler::DGUSLCD_SendPrintTimeToDisplay(DGUS_VP_Variable &var) {
 
 void DGUSScreenHandler::DGUSLCD_SendAboutFirmwareVersion(DGUS_VP_Variable &var) {
   const char* fwVersion = PSTR(SOFTVERSION);
+  const char* fwWebsite = PSTR(WEBSITE_URL);
 
   dgusdisplay.WriteVariablePGM(var.VP, fwVersion, strlen(fwVersion), true);
+  dgusdisplay.WriteVariablePGM(VP_MARLIN_WEBSITE, fwWebsite, strlen(fwWebsite), true);
 }
 
 void DGUSScreenHandler::DGUSLCD_SendAboutPrintSize(DGUS_VP_Variable &var) {
@@ -1182,6 +1184,7 @@ bool DGUSScreenHandler::loop() {
       int16_t percentage = static_cast<int16_t>(((float) ms / (float)BOOTSCREEN_TIMEOUT) * 100);
       if (percentage > 100) percentage = 100;
 
+
       dgusdisplay.WriteVariable(VP_STARTPROGRESSBAR, percentage);
     }
 
@@ -1192,6 +1195,31 @@ bool DGUSScreenHandler::loop() {
 
     if (!booted && ELAPSED(ms, BOOTSCREEN_TIMEOUT)) {
       booted = true;
+      #if HAS_MESH
+        if (ExtUI::getMeshValid())
+        {
+          uint8_t abl_probe_index = 0;
+            for(uint8_t outer = 0; outer < GRID_MAX_POINTS_Y; outer++)
+            {
+              for (uint8_t inner = 0; inner < GRID_MAX_POINTS_X; inner++)
+              {
+                uint8_t x_Point = inner;
+                bool zig = (outer & 1);
+                if (zig) x_Point = (GRID_MAX_POINTS_X - 1) - inner;
+                xy_uint8_t point = {x_Point, outer};
+
+                DEBUG_ECHOLNPAIR("Mesh X: ", x_Point);
+                DEBUG_ECHOLNPAIR("Mesh Y: ", outer);
+                DEBUG_ECHOLNPAIR("Mesh adr: ", (VP_MESH_VALUE_START + (abl_probe_index * 4)));
+                DEBUG_ECHOLNPAIR("Mesh Val: ", ExtUI::getMeshPoint(point));
+                ScreenHandler.DGUSLCD_SendFloatAsLongValueToDisplay<3>((VP_MESH_VALUE_START + (abl_probe_index * 4)), ExtUI::getMeshPoint(point));
+                ++abl_probe_index;
+              }
+            }
+
+          ExtUI::setLevelingActive(true);
+        }
+      #endif
       GotoScreen(DGUSLCD_SCREEN_MAIN);
     }
   }
