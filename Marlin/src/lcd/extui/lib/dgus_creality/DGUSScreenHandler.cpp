@@ -523,12 +523,17 @@ void DGUSScreenHandler::OnMeshLevelingUpdate(const int8_t xpos, const int8_t ypo
 
   if (MeshLevelIndex == GRID_MAX_POINTS) {
     // Done
-    if(!ExtUI::isPrinting())
-      thermalManager.disable_all_heaters();
 
+    SERIAL_ECHOLN("Mesh Complete - Saving");
     settings.save();
 
-    GotoScreen(DGUSLCD_SCREEN_ZOFFSET_LEVEL);
+    if(!ExtUI::isPrinting()) {
+      thermalManager.disable_all_heaters();
+      GotoScreen(DGUSLCD_SCREEN_ZOFFSET_LEVEL);
+    }
+    else
+      PopToOldScreen();
+
   }
 }
 
