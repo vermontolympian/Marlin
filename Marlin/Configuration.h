@@ -128,7 +128,7 @@
 
 // Choose the name from boards.h that matches your setup
 #ifndef MOTHERBOARD
-  #define MOTHERBOARD BOARD_CREALITY_V452
+  #define MOTHERBOARD BOARD_CREALITY_V453
 #endif
 
 // Name displayed in the LCD "Ready" message and Info menu
@@ -1014,7 +1014,7 @@
   //#define PROBE_TARE_PIN PA5    // Override default pin
   #if ENABLED(PROBE_ACTIVE_INPUT)
     // Fail to tare/probe if PROBE_ACTIVE_INPUT reports the probe to be active
-    #define PROBE_TARE_ONLY_WHILE_INACTIVE
+    //#define PROBE_TARE_ONLY_WHILE_INACTIVE
   #endif
 #endif
 
@@ -1046,11 +1046,11 @@
  *     But: `M851 Z+1` with a CLEARANCE of 2  =>  2mm from bed to nozzle.
  */
 #define Z_CLEARANCE_DEPLOY_PROBE   10 // Z Clearance for Deploy/Stow
-#define Z_CLEARANCE_BETWEEN_PROBES  7 // Z Clearance between probe points
-#define Z_CLEARANCE_MULTI_PROBE     7 // Z Clearance between multiple probes
+#define Z_CLEARANCE_BETWEEN_PROBES  3 // Z Clearance between probe points
+#define Z_CLEARANCE_MULTI_PROBE     3 // Z Clearance between multiple probes
 //#define Z_AFTER_PROBING           5 // Z position after probing is done
 
-#define Z_PROBE_LOW_POINT          -2 // Farthest distance below the trigger-point to go before stopping
+#define Z_PROBE_LOW_POINT          -3 // Farthest distance below the trigger-point to go before stopping
 
 // For M851 give a range for adjusting the Z probe offset
 #define Z_PROBE_OFFSET_RANGE_MIN -10
