@@ -280,13 +280,11 @@ void Endstops::init() {
     #endif
   #endif
 
-  #if PIN_EXISTS(PROBE_ENABLE_PIN)
-    SET_INPUT(PROBE_ENABLE_PIN);
+  #if ENABLED(PROBE_ACTIVATION_SWITCH)
+    SET_INPUT(PROBE_ACTIVATION_SWITCH_PIN);
   #endif
 
-  #if ENABLED(PROBE_TARE)
-    probe.tare_z_probe();
-  #endif
+  TERN_(PROBE_TARE, probe.tare());
 
   TERN_(ENDSTOP_INTERRUPTS_FEATURE, setup_endstop_interrupts());
 
@@ -466,8 +464,8 @@ void _O2 Endstops::report_states() {
   #if HAS_Z4_MAX
     ES_REPORT(Z4_MAX);
   #endif
-  #if ENABLED(PROBE_ACTIVE_INPUT)
-    print_es_state(READ(PROBE_ENABLE_PIN) == PROBE_ACTIVE_INPUT_STATE, PSTR("Probe Enable Pin"));
+  #if BOTH(MARLIN_DEV_MODE, PROBE_ACTIVATION_SWITCH)
+    print_es_state(probe_switch_activated(), PSTR(STR_PROBE_EN));
   #endif
   #if HAS_CUSTOM_PROBE_PIN
     print_es_state(PROBE_TRIGGERED(), PSTR(STR_Z_PROBE));
@@ -618,12 +616,11 @@ void Endstops::update() {
     #endif
   #endif
 
-  #if ENABLED(PROBE_ACTIVE_INPUT)
-    if (READ(PROBE_ENABLE_PIN) == PROBE_ACTIVE_INPUT_STATE)
-  #endif
-    {
+  #if HAS_BED_PROBE
+    // When closing the gap check the enabled probe
+    if (probe_switch_activated())
       UPDATE_ENDSTOP_BIT(Z, TERN(HAS_CUSTOM_PROBE_PIN, MIN_PROBE, MIN));
-    }
+  #endif
 
   #if HAS_Z_MAX && !Z_SPI_SENSORLESS
     // Check both Z dual endstops
