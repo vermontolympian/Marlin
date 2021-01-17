@@ -991,7 +991,7 @@
 #define XY_PROBE_SPEED (133*60)
 
 // Feedrate (mm/min) for the first approach when double-probing (MULTIPLE_PROBING == 2)
-#define Z_PROBE_SPEED_FAST (HOMING_FEEDRATE_Z / 2)
+#define Z_PROBE_SPEED_FAST ((4 * 60) / 2)
 
 // Feedrate (mm/min) for the "accurate" probe of each point
 #define Z_PROBE_SPEED_SLOW (Z_PROBE_SPEED_FAST / 2)
@@ -1002,21 +1002,6 @@
 #if ENABLED(PROBE_ACTIVE_INPUT)
   #define PROBE_ACTIVE_INPUT_STATE LOW // State indicating probe is active
   //#define PROBE_ENABLE_PIN PC6 // Override default pin
-#endif
-
-// Probe should be tared prior to each probe
-// Useful for strain or piezo sensors which must exclude strain such
-// as that from cables or bowden cables pulling on the carriage.
-#define PROBE_TARE
-#if ENABLED(PROBE_TARE)
-  #define PROBE_TARE_TIME  200    // Time to hold tare pin (milliseconds)
-  #define PROBE_TARE_DELAY 200    // Delay after tare before (milliseconds)
-  #define PROBE_TARE_STATE LOW   // State to write pin for tare
-  //#define PROBE_TARE_PIN PA5    // Override default pin
-  #if ENABLED(PROBE_ACTIVE_INPUT)
-    // Fail to tare/probe if PROBE_ACTIVE_INPUT reports the probe to be active
-    //#define PROBE_TARE_ONLY_WHILE_INACTIVE
-  #endif
 #endif
 
 
@@ -1031,19 +1016,18 @@
   //#define PROBE_ACTIVATION_SWITCH_PIN PC6 // Override default pin
 #endif
 
-/**
- * Tare Probe (determine zero-point) prior to each probe.
- * Useful for a strain gauge or piezo sensor that needs to factor out
- * elements such as cables pulling on the carriage.
- */
-//#define PROBE_TARE
+// Probe should be tared prior to each probe
+// Useful for strain or piezo sensors which must exclude strain such
+// as that from cables or bowden cables pulling on the carriage.
+#define PROBE_TARE
 #if ENABLED(PROBE_TARE)
-  #define PROBE_TARE_TIME  200    // (ms) Time to hold tare pin
-  #define PROBE_TARE_DELAY 200    // (ms) Delay after tare before
+  #define PROBE_TARE_TIME  200    // Time to hold tare pin (milliseconds)
+  #define PROBE_TARE_DELAY 200    // Delay after tare before (milliseconds)
   #define PROBE_TARE_STATE HIGH   // State to write pin for tare
   //#define PROBE_TARE_PIN PA5    // Override default pin
-  #if ENABLED(PROBE_ACTIVATION_SWITCH)
-    //#define PROBE_TARE_ONLY_WHILE_INACTIVE  // Fail to tare/probe if PROBE_ACTIVATION_SWITCH is active
+  #if ENABLED(PROBE_ACTIVE_INPUT)
+    // Fail to tare/probe if PROBE_ACTIVE_INPUT reports the probe to be active
+    //#define PROBE_TARE_ONLY_WHILE_INACTIVE
   #endif
 #endif
 
@@ -1421,7 +1405,6 @@
   #define LEVEL_CORNERS_HEIGHT      0.0   // (mm) Z height of nozzle at leveling points
   #define LEVEL_CORNERS_Z_HOP       4.0   // (mm) Z height of nozzle between leveling points
   //#define LEVEL_CENTER_TOO              // Move to the center after the last corner
-  #endif
 
   /**
    * Corner Leveling Order

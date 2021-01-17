@@ -31,16 +31,22 @@
 #if ENABLED(DGUS_LCD_UI_CREALITY_TOUCH)
 
 #include "ui_api.h"
+#include "../marlinui.h"
 #include "lib/dgus_creality/DGUSDisplay.h"
 #include "lib/dgus_creality/DGUSDisplayDef.h"
 #include "lib/dgus_creality/DGUSScreenHandler.h"
+#include "lib/dgus_creality/creality_touch/PIDHandler.h"
+
+#if ENABLED(POWER_LOSS_RECOVERY)
+  #include "../../feature/powerloss.h"
+#endif
 
 extern const char NUL_STR[];
 
 namespace ExtUI {
 
   void onStartup() {
-    dgusdisplay.InitDisplay();
+    ScreenHandler.Init();
     ScreenHandler.UpdateScreenVPData();
   }
 
@@ -58,15 +64,21 @@ namespace ExtUI {
     } else {
       ScreenHandler.GotoScreen(DGUSLCD_SCREEN_KILL);
     }
-
+    
+    ScreenHandler.KillScreenCalled();
     while (!ScreenHandler.loop());  // Wait while anything is left to be sent
-  }
+}
 
   void onMediaInserted() { TERN_(SDSUPPORT, ScreenHandler.SDCardInserted()); }
   void onMediaError()    { TERN_(SDSUPPORT, ScreenHandler.SDCardError()); }
   void onMediaRemoved()  { TERN_(SDSUPPORT, ScreenHandler.SDCardRemoved()); }
 
   void onPlayTone(const uint16_t frequency, const uint16_t duration) {
+    if (ScreenHandler.getCurrentScreen() == DGUSLCD_SCREEN_FEED) {
+        // We're in the feed (load filament) workflow - no beep - there is no confirmation
+        return;
+    }
+
     ScreenHandler.Buzzer(frequency, duration);
   }
 
@@ -75,9 +87,14 @@ bool hasPrintTimer = false;
   void onPrintTimerStarted() {
     hasPrintTimer = true;
 
-    if (!ExtUI::isPrintingFromMedia()) {
+    if (!ExtUI::isPrintingFromMedia() && !(PrintJobRecovery::valid() && PrintJobRecovery::exists())) {
       ScreenHandler.SetPrintingFromHost();
+
     }
+    
+#if ENABLED(LCD_SET_PROGRESS_MANUALLY)
+    ui.progress_reset();
+#endif
 
     ScreenHandler.GotoScreen(DGUSLCD_SCREEN_PRINT_RUNNING);
   }
@@ -96,7 +113,10 @@ bool hasPrintTimer = false;
   }
 
   void onFilamentRunout(const extruder_t extruder) {
-    ScreenHandler.FilamentRunout();
+    // Only navigate to filament runout screen when we don't use M600 for changing the filament - otherwise it gets confusing for the user
+    if (strcmp_P(FILAMENT_RUNOUT_SCRIPT, PSTR("M600")) != 0) {
+      ScreenHandler.FilamentRunout();
+    }
   }
 
   void onUserConfirmed() {
@@ -109,23 +129,27 @@ bool hasPrintTimer = false;
     if (msg) {
       DEBUG_ECHOLNPAIR("User confirmation requested: ", msg);
 
+      if (ScreenHandler.getCurrentScreen() == DGUSLCD_SCREEN_FEED) {
+        // We're in the feed (load filament) workflow - immediately assume confirmed
+        onUserConfirmed();
+        return;
+      }
+
       ScreenHandler.setstatusmessagePGM(msg);
       ScreenHandler.sendinfoscreen(PSTR("Confirmation required"), msg, NUL_STR, PSTR("Ok"), true, true, false, true);
 
-      //if (hasPrintTimer) {
-      //  ScreenHandler.GotoScreen(DGUSLCD_SCREEN_PRINT_PAUSED);
-      //} else {
+      if (ExtUI::isPrinting()) {
+        ScreenHandler.GotoScreen(DGUSLCD_SCREEN_DIALOG_PAUSE);
+      } else {
         ScreenHandler.GotoScreen(DGUSLCD_SCREEN_POPUP);
-     // }
+      }
     }
-    //else if (ScreenHandler.getCurrentScreen() == DGUSLCD_SCREEN_POPUP) {
-    //  DEBUG_ECHOLNPAIR("User confirmation canceled");
+    else if (ScreenHandler.getCurrentScreen() == DGUSLCD_SCREEN_POPUP) {
+      DEBUG_ECHOLNPAIR("User confirmation canceled");
 
-    //  ScreenHandler.setstatusmessagePGM(nullptr);
-    //  ScreenHandler.PopToOldScreen();
-   // }
-
-    //while (!ScreenHandler.loop());  // Wait while anything is left to be sent
+      ScreenHandler.setstatusmessagePGM(nullptr);
+      ScreenHandler.PopToOldScreen();
+    }
   }
 
   void onStatusChanged(const char * const msg) { ScreenHandler.setstatusmessage(msg); }
@@ -145,25 +169,13 @@ bool hasPrintTimer = false;
   void onPrintFinished() {
     ScreenHandler.OnPrintFinished();
   }
-
+  
   void onStoreSettings(char *buff) {
-    // Called when saving to EEPROM (i.e. M500). If the ExtUI needs
-    // permanent data to be stored, it can write up to eeprom_data_size bytes
-    // into buff.
-
-    // Example:
-    //  static_assert(sizeof(myDataStruct) <= ExtUI::eeprom_data_size);
-    //  memcpy(buff, &myDataStruct, sizeof(myDataStruct));
+    ScreenHandler.StoreSettings(buff);
   }
 
   void onLoadSettings(const char *buff) {
-    // Called while loading settings from EEPROM. If the ExtUI
-    // needs to retrieve data, it should copy up to eeprom_data_size bytes
-    // from buff
-
-    // Example:
-    //  static_assert(sizeof(myDataStruct) <= ExtUI::eeprom_data_size);
-    //  memcpy(&myDataStruct, buff, sizeof(myDataStruct));
+    ScreenHandler.LoadSettings(buff);
   }
 
   void onConfigurationStoreWritten(bool success) {
@@ -200,38 +212,39 @@ bool hasPrintTimer = false;
   #if ENABLED(POWER_LOSS_RECOVERY)
     void onPowerLossResume() {
       // Called on resume from power-loss
-      ScreenHandler.GotoScreen(DGUSLCD_SCREEN_POWER_LOSS);
+      ScreenHandler.OnPowerlossResume();
     }
   #endif
 
 
   #if HAS_PID_HEATING
     void onPidTuning(const result_t rst) {
-       //Called for temperature PID tuning result
-       switch (rst) {
-         case PID_BAD_EXTRUDER_NUM:
-           ScreenHandler.setstatusmessagePGM(GET_TEXT(MSG_PID_BAD_EXTRUDER_NUM));
-           break;
-         case PID_TEMP_TOO_HIGH:
-           ScreenHandler.setstatusmessagePGM(GET_TEXT(MSG_PID_TEMP_TOO_HIGH));
-           break;
-         case PID_TUNING_TIMEOUT:
-           ScreenHandler.setstatusmessagePGM(GET_TEXT(MSG_PID_TIMEOUT));
-           break;
-         case PID_DONE:
-           ScreenHandler.setstatusmessagePGM(GET_TEXT(MSG_PID_AUTOTUNE_DONE));
-           break;
-       }
-       ScreenHandler.GotoScreen(DGUSLCD_SCREEN_MAIN);
+      // Called for temperature PID tuning result
+      switch (rst) {
+        case PID_BAD_EXTRUDER_NUM:
+          PIDHandler::result_message = GET_TEXT(MSG_PID_BAD_EXTRUDER_NUM);
+          ScreenHandler.setstatusmessagePGM(PIDHandler::result_message);
+          break;
+        case PID_TEMP_TOO_HIGH:
+          PIDHandler::result_message = GET_TEXT(MSG_PID_TEMP_TOO_HIGH);
+          ScreenHandler.setstatusmessagePGM(PIDHandler::result_message);
+          break;
+        case PID_TUNING_TIMEOUT:
+          PIDHandler::result_message = GET_TEXT(MSG_PID_TIMEOUT);
+          ScreenHandler.setstatusmessagePGM(PIDHandler::result_message);
+        break;
+        case PID_DONE:
+          PIDHandler::result_message = GET_TEXT(MSG_PID_AUTOTUNE_DONE);
+          ScreenHandler.setstatusmessagePGM(PIDHandler::result_message);
+        break;
+      }
     }
   #endif
 
   void onSteppersDisabled() {
-    ScreenHandler.HandleStepperState(false);
   }
 
   void onSteppersEnabled() {
-    ScreenHandler.HandleStepperState(true);
   }
 
 }
