@@ -43,12 +43,6 @@
 #include "../../../../module/printcounter.h"
 #include "../../../../feature/caselight.h"
 
-#define	MACVERSION		STRING_CONFIG_H_AUTHOR
-#define	SOFTVERSION		SHORT_BUILD_VERSION
-#define MAC_LENGTH              X_BED_SIZE
-#define MAC_WIDTH               Y_BED_SIZE
-#define MAC_HEIGHT              Z_MAX_POS
-
 #if ENABLED(POWER_LOSS_RECOVERY)
   #include "../../../../feature/powerloss.h"
 #endif
@@ -728,7 +722,7 @@ void DGUSScreenHandler::HandleTemperatureChanged(DGUS_VP_Variable &var, void *va
 
 void DGUSScreenHandler::HandleFanSpeedChanged(DGUS_VP_Variable &var, void *val_ptr) {
   uint16_t newValue = swap16(*(uint16_t*)val_ptr);
-    
+
     SERIAL_ECHOLNPAIR("Fan speed changed: ", newValue);
     ExtUI::setTargetFan_percent(newValue, ExtUI::fan_t::FAN0);
 
@@ -738,7 +732,7 @@ void DGUSScreenHandler::HandleFanSpeedChanged(DGUS_VP_Variable &var, void *val_p
 void DGUSScreenHandler::HandleFlowRateChanged(DGUS_VP_Variable &var, void *val_ptr) {
   #if EXTRUDERS
     uint16_t newValue = swap16(*(uint16_t*)val_ptr);
-    
+
     SERIAL_ECHOLNPAIR("Flow rate changed: ", newValue);
     ExtUI::setFlow_percent(newValue, ExtUI::E0);
 
@@ -988,7 +982,7 @@ void DGUSScreenHandler::HandleLiveAdjustZ(DGUS_VP_Variable &var, void *val_ptr) 
   ExtUI::smartAdjustAxis_steps(steps, ExtUI::axis_t::Z, true);
 
   RequestSaveSettings();
-  
+
   ScreenHandler.ForceCompleteUpdate();
   ScreenHandler.skipVP = var.VP; // don't overwrite value the next update time as the display might autoincrement in parallel
   return;
