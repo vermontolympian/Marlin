@@ -21,7 +21,7 @@
  */
 #pragma once
 
-#if !defined(MCU_LPC1768) && !defined(MCU_LPC1769)
+#if NOT_TARGET(MCU_LPC1768) && NOT_TARGET(MCU_LPC1769)
   #error "Oops! Make sure you have the LPC1768 environment selected in your IDE for 1778 and LPC1769 for 4078."
 #endif
 
