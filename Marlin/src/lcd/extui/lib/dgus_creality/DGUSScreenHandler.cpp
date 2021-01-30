@@ -608,14 +608,14 @@ void DGUSScreenHandler::OnMeshLevelingUpdate(const int8_t xpos, const int8_t ypo
     }
   }
 
-  if (MeshLevelIndex == GRID_MAX_POINTS) {
+  if (MeshLevelIndex == GRID_MAX_POINTS-1) {
     // Done
 
     SERIAL_ECHOLN("Mesh Complete - Saving");
     settings.save();
 
     if(!ExtUI::isPrinting()) {
-      thermalManager.disable_all_heaters();
+      //thermalManager.disable_all_heaters();
       GotoScreen(DGUSLCD_SCREEN_ZOFFSET_LEVEL);
     }
     else
@@ -1148,6 +1148,20 @@ void DGUSScreenHandler::HandleToggleTouchScreenMute(DGUS_VP_Variable &var, void 
   ScreenHandler.skipVP = var.VP; // don't overwrite value the next update time as the display might autoincrement in parallel
 }
 
+#if HAS_PROBE_SETTINGS
+void DGUSScreenHandler::HandleToggleProbeHeaters(DGUS_VP_Variable &var, void *val_ptr) {
+  probe.settings.turn_heaters_off = !probe.settings.turn_heaters_off;
+
+  RequestSaveSettings();
+}
+
+void DGUSScreenHandler::HandleToggleProbePreheatTemp(DGUS_VP_Variable &var, void *val_ptr) {
+  ScreenHandler.DGUSLCD_SetValueDirectly<uint16_t>(var, val_ptr);
+
+  RequestSaveSettings();
+}
+#endif
+
 void DGUSScreenHandler::HandleTouchScreenStandbyBrightnessSetting(DGUS_VP_Variable &var, void *val_ptr) {
   uint16_t newvalue = swap16(*(uint16_t*)val_ptr);
 
@@ -1174,10 +1188,10 @@ void DGUSScreenHandler::HandleFanToggle() {
 }
 
 void DGUSScreenHandler::UpdateNewScreen(DGUSLCD_Screens newscreen, bool save_current_screen) {
-  DEBUG_ECHOLNPAIR("SetNewScreen: ", newscreen);
+  SERIAL_ECHOLNPAIR("SetNewScreen: ", newscreen);
 
   if (save_current_screen && current_screen != DGUSLCD_SCREEN_POPUP && current_screen != DGUSLCD_SCREEN_CONFIRM) {
-    DEBUG_ECHOLNPAIR("SetNewScreen (saving): ", newscreen);
+    SERIAL_ECHOLNPAIR("SetNewScreen (saving): ", newscreen);
     memmove(&past_screens[1], &past_screens[0], sizeof(past_screens) - 1);
     past_screens[0] = current_screen;
   }

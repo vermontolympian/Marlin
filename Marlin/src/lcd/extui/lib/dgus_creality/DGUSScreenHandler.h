@@ -98,6 +98,11 @@ public:
   static void HandleToggleTouchScreenStandbySetting(DGUS_VP_Variable &var, void *val_ptr);
   static void HandleTouchScreenStandbyBrightnessSetting(DGUS_VP_Variable &var, void *val_ptr);
 
+  #if HAS_PROBE_SETTINGS
+  static void HandleToggleProbeHeaters(DGUS_VP_Variable &var, void *val_ptr);
+  static void HandleToggleProbePreheatTemp(DGUS_VP_Variable &var, void *val_ptr);
+  #endif
+
   #if HAS_PID_HEATING
     // Hook for "Change this temperature PID para"
     static void HandleTemperaturePIDChanged(DGUS_VP_Variable &var, void *val_ptr);
@@ -293,7 +298,6 @@ public:
   static void DGUSLCD_SendFloatAsIntValueToDisplay(DGUS_VP_Variable &var) {
     if (var.memadr) {
       float f = *(float *)var.memadr;
-      DEBUG_ECHOLNPAIR_F(" >> ", f, 6);
       f *= cpow(10, decimals);
 
       // Round - truncated values look like skipped numbers
@@ -327,8 +331,6 @@ public:
   static inline bool IsScreenComplete() { return ScreenComplete; }
 
   static inline DGUSLCD_Screens getCurrentScreen() { return current_screen; }
-
-  static void updateCurrentScreen(DGUSLCD_Screens current);
 
   static bool HandlePendingUserConfirmation();
 

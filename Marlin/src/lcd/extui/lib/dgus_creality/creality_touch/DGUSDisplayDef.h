@@ -73,7 +73,10 @@ enum DGUSLCD_Screens : uint8_t {
   DGUSLCD_SCREEN_PIDTUNE_CALIBRATION = 68,
   DGUSLCD_SCREEN_ESTEPS_CALIBRATION = 69,
 
-  DGUSLCD_SCREEN_TUNEFWRETRACT = 70
+  DGUSLCD_SCREEN_TUNEFWRETRACT = 70,
+
+  DGUSLCD_SCREEN_ESTEPS_CALIBRATION_RESULTS = 71,
+  DGUSLCD_SCREEN_LEVELING_SETTINGS = 72
 };
 
 // Display Memory layout used (T5UID)
@@ -191,7 +194,7 @@ constexpr uint16_t VP_MARLIN_VERSION = 0x2222;
 constexpr uint8_t VP_MARLIN_VERSION_LEN = 20;   // there is more space on the display, if needed.
 
 constexpr uint16_t VP_MARLIN_WEBSITE = 0x2242;
-constexpr uint8_t VP_MARLIN_WEBSITE_LEN = 32;  
+constexpr uint8_t VP_MARLIN_WEBSITE_LEN = 32;
 
 constexpr uint16_t VP_STANDBY_BACKLIGHT_ICON = 0x2280;
 constexpr uint16_t VP_STANDBY_BACKLIGHT_TOGGLE = 0x2282;
@@ -353,7 +356,6 @@ constexpr uint16_t VP_FAN_TOGGLE = 0x101E;
 constexpr uint16_t VP_LED_TOGGLE = 0x101F;
 constexpr uint16_t VP_MESH_LEVEL_TEMP = 0x108A;
 constexpr uint16_t VP_MESH_LEVEL_STATUS = 0x108D;
-constexpr uint16_t VP_MESH_VALUE_START = 0x1300;
 constexpr uint16_t VP_FEED_AMOUNT = 0x1054;
 constexpr uint16_t VP_FEED_PROGRESS = 0x108e;
 
@@ -378,7 +380,6 @@ constexpr uint16_t VP_PIDTUNE_START_BUTTON = 0x229B;
 
 // FWRetract
 constexpr uint16_t VP_FWRETRACT_NAV_BUTTON = 0x22AD;
-constexpr uint16_t VP_FWRETRACT_NAV_BUTTON_ICON = 0x22AF;
 
 constexpr uint16_t VP_FWRETRACT_RETRACT_LENGTH = 0x22B1;
 constexpr uint16_t VP_FWRETRACT_RETRACT_FEEDRATE = 0x22B3;
@@ -391,6 +392,19 @@ constexpr uint16_t VP_FWRETRACT_TOGGLE_BUTTON = 0x22BB;
 constexpr uint16_t VP_FWRETRACT_TOGGLE_BUTTON_ICON = 0x22BD;
 constexpr uint16_t VP_FWRETRACT_INDICATOR_ICON = 0x22BF;
 
+// Other tuning
+constexpr uint16_t VP_LINEAR_ADVANCE_FACTOR = 0x22AF;
+
+// Leveling settings
+constexpr uint16_t VP_TOGGLE_PROBE_HEATERS_OFF_ONOFF_BUTTON = 0x22C1;
+constexpr uint16_t VP_TOGGLE_PROBE_HEATERS_OFF_ONOFF_ICON = 0x22C3;
+
+constexpr uint16_t VP_TOGGLE_PROBE_PREHEAT_HOTEND_TEMP = 0x22C5;
+constexpr uint16_t VP_TOGGLE_PROBE_PREHEAT_BED_TEMP = 0x22C7;
+
+constexpr uint16_t VP_TOGGLE_PROBE_SETTINGS_NAV_BUTTON = 0x22C9;
+
+constexpr uint16_t VP_MESH_VALUE_START = 0x1300;
 
 // E-steps calibration
 constexpr uint16_t VP_ESTEPS_CURRENT = 0x229d;
@@ -419,9 +433,5 @@ constexpr uint16_t ICON_STANDBY_TOGGLE_OFF = 8;
 constexpr uint16_t ICON_FWRETRACT_AUTO_TOGGLE_ON = 9;
 constexpr uint16_t ICON_FWRETRACT_AUTO_TOGGLE_OFF = 10;
 
-
-constexpr uint16_t ICON_FWRETRACT_NAV_UNAVAILABLE = 14;
-constexpr uint16_t ICON_FWRETRACT_NAV_AVAILABLE = 15;
-
-constexpr uint16_t ICON_FWRETRACT_AUTO_DISENGAGED = 16; // This icon deliberately does not exist
-constexpr uint16_t ICON_FWRETRACT_AUTO_ENGAGED = 17;
+constexpr uint16_t ICON_FWRETRACT_AUTO_DISENGAGED = 4; // This icon deliberately does not exist
+constexpr uint16_t ICON_FWRETRACT_AUTO_ENGAGED = 3;

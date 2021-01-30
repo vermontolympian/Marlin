@@ -28,7 +28,7 @@
 /**
  * Marlin release version identifier
  */
-#define SHORT_BUILD_VERSION "TM3D2.0.7.2-CR6-B"
+#define SHORT_BUILD_VERSION "TM3D2.0.7.2-CR6-C"
 
 /**
  * Verbose version identifier which should contain a reference to the location

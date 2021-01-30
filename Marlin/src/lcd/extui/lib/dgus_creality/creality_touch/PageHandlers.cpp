@@ -30,16 +30,9 @@ void MainMenuHandler(DGUS_VP_Variable &var, unsigned short buttonValue) {
         case VP_BUTTON_MAINENTERKEY:
             switch (buttonValue) {
                 case 1:
-                    // Try to mount an unmounted card 
-                    if (!card.isMounted()) {
-                        card.mount();
-
-                        if (card.isMounted()) {
-                            ExtUI::onMediaInserted();
-                        }
-                    }
-
-                    ScreenHandler.GotoScreen(DGUSLCD_SCREEN_SDFILELIST);
+                    // Try to mount an unmounted card (BTT SKR board has especially some trouble sometimes)
+                    card.mount();
+                    ScreenHandler.SDCardInserted();
                     break;
 
                 case 2:
@@ -125,8 +118,9 @@ void LevelingModeHandler(DGUS_VP_Variable &var, unsigned short buttonValue) {
 
         case VP_BUTTON_PREPAREENTERKEY:
             if (buttonValue == 9) {
-                // If we're in the workflow of calibration from the home screen, there is no need to keep the heaters on at this point
-                thermalManager.disable_all_heaters();
+                #if DISABLED(HOTEND_IDLE_TIMEOUT)
+                    thermalManager.disable_all_heaters();
+                #endif
 
                 ScreenHandler.GotoScreen(DGUSLCD_SCREEN_MAIN);
             }
@@ -390,11 +384,15 @@ void InfoMenuHandler(DGUS_VP_Variable &var, unsigned short buttonValue) {
  void change_filament_with_temp(PGM_P command, const uint16_t celsius) {
      // Heat if necessary
     if (ExtUI::getActualTemp_celsius(ExtUI::E0) < celsius && abs(ExtUI::getActualTemp_celsius(ExtUI::E0) - celsius) > 2) {
+        ScreenHandler.setstatusmessagePGM(PSTR("Heating up..."));
+
         thermalManager.setTargetHotend(celsius, ExtUI::H0);
         thermalManager.wait_for_hotend(ExtUI::H0, false);
     }
 
     // Inject load filament command
+    ScreenHandler.setstatusmessagePGM(PSTR("Filament load/unload..."));
+
     char cmd[64];
     sprintf_P(cmd, command, ScreenHandler.feed_amount);
     
@@ -407,6 +405,8 @@ void InfoMenuHandler(DGUS_VP_Variable &var, unsigned short buttonValue) {
     planner.synchronize();
 
     SERIAL_ECHOPGM_P("- done");
+
+    ScreenHandler.setstatusmessagePGM(PSTR("Filament load/unload complete"));
 }
 
 void FeedHandler(DGUS_VP_Variable &var, unsigned short buttonValue) {
@@ -422,7 +422,7 @@ void FeedHandler(DGUS_VP_Variable &var, unsigned short buttonValue) {
         case 1:
             dgusdisplay.WriteVariable(VP_FEED_PROGRESS, static_cast<int16_t>(10));
 
-            change_filament_with_temp(PSTR("M701 L%f"), celsius);
+            change_filament_with_temp(PSTR("M701 L%f P0"), celsius);
 
             dgusdisplay.WriteVariable(VP_FEED_PROGRESS, static_cast<int16_t>(0));
         break;
