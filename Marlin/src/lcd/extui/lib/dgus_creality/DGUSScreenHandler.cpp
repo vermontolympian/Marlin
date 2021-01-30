@@ -608,11 +608,11 @@ void DGUSScreenHandler::OnMeshLevelingUpdate(const int8_t xpos, const int8_t ypo
     }
   }
 
-  if (MeshLevelIndex == GRID_MAX_POINTS-1) {
+  if (MeshLevelIndex == GRID_MAX_POINTS) {
     // Done
 
     SERIAL_ECHOLN("Mesh Complete - Saving");
-    settings.save();
+    RequestSaveSettings();
 
     if(!ExtUI::isPrinting()) {
       //thermalManager.disable_all_heaters();

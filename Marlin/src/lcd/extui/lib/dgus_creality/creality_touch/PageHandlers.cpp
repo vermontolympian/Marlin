@@ -95,7 +95,7 @@ void LevelingModeHandler(DGUS_VP_Variable &var, unsigned short buttonValue) {
                     planner.synchronize();
 
                     ExtUI::injectCommands_P("G0 Z0");
-                    
+
                     queue.advance();
                 break;
 
@@ -128,7 +128,7 @@ void LevelingModeHandler(DGUS_VP_Variable &var, unsigned short buttonValue) {
 
         case VP_BUTTON_MAINENTERKEY:
             // Go to leveling screen
-            ExtUI::injectCommands_P("G28\nG29");
+            ExtUI::injectCommands_P("G28\nG29\nM500");
             ScreenHandler.GotoScreen(DGUSLCD_SCREEN_LEVELING);
             break;
     }
@@ -155,7 +155,7 @@ void TempMenuHandler(DGUS_VP_Variable &var, unsigned short buttonValue) {
             break;
 
         case VP_BUTTON_TEMPCONTROL:
-            switch (buttonValue){ 
+            switch (buttonValue){
                 case 3:
                     ScreenHandler.GotoScreen(DGUSLCD_SCREEN_TEMP_PLA);
                     break;
@@ -191,7 +191,7 @@ void PrepareMenuHandler(DGUS_VP_Variable &var, unsigned short buttonValue) {
             }
         break;
 
-        case VP_BUTTON_HEATLOADSTARTKEY: 
+        case VP_BUTTON_HEATLOADSTARTKEY:
             ScreenHandler.GotoScreen(DGUSLCD_SCREEN_FEED);
         break;
 
@@ -395,7 +395,7 @@ void InfoMenuHandler(DGUS_VP_Variable &var, unsigned short buttonValue) {
 
     char cmd[64];
     sprintf_P(cmd, command, ScreenHandler.feed_amount);
-    
+
     SERIAL_ECHOPAIR("Injecting command: ", cmd);
     ExtUI::injectCommands(cmd);
 
