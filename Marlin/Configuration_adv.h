@@ -3582,8 +3582,9 @@
  * Adds capability to work with any adjustable current drivers
  * Implements as G34 as M915 is deprecated
  */
-
-#define MECHANICAL_GANTRY_CALIBRATION
+#if DISABLED(TazDualZ)
+  #define MECHANICAL_GANTRY_CALIBRATION
+#endif
 #if ENABLED(MECHANICAL_GANTRY_CALIBRATION)
 
   #if ENABLED(Mini)
