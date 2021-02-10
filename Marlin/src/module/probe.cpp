@@ -337,8 +337,21 @@ FORCE_INLINE void probe_specific_action(const bool deploy) {
     #if PROBING_BED_TEMP || LEVELING_BED_TEMP
       #define WAIT_FOR_BED_HEAT
     #endif
-    const uint16_t hotendPreheat = TERN0(WAIT_FOR_NOZZLE_HEAT, thermalManager.degHotend(0) < hotend_temp) ? hotend_temp : 0,
-                      bedPreheat = TERN0(WAIT_FOR_BED_HEAT,    thermalManager.degBed()     < bed_temp)    ? bed_temp    : 0;
+
+    #if ENABLED(WAIT_FOR_NOZZLE_HEAT)
+      uint16_t hotendPreheat;
+      if (thermalManager.degHotend(0) < hotend_temp && thermalManager.degTargetHotend(0) < hotend_temp) hotendPreheat = hotend_temp;
+      else if (thermalManager.degTargetHotend(0) < hotend_temp) hotendPreheat = thermalManager.degTargetHotend(0);
+      else hotendPreheat = 0;
+    #endif
+
+    #if ENABLED(WAIT_FOR_BED_HEAT)
+      uint16_t bedPreheat;
+      if (thermalManager.degBed() < bed_temp &&  thermalManager.degTargetBed() < hotend_temp) bedPreheat = bed_temp;
+      else if (thermalManager.degTargetBed() < bed_temp) bedPreheat = thermalManager.degTargetBed();
+      else bedPreheat = 0;
+    #endif
+
     DEBUG_ECHOPGM("Preheating ");
     if (hotendPreheat) {
       DEBUG_ECHOPAIR("hotend (", hotendPreheat, ") ");
@@ -347,10 +360,10 @@ FORCE_INLINE void probe_specific_action(const bool deploy) {
     if (bedPreheat) DEBUG_ECHOPAIR("bed (", bedPreheat, ") ");
     DEBUG_EOL();
 
-    TERN_(WAIT_FOR_NOZZLE_HEAT, if (hotendPreheat) thermalManager.setTargetHotend(hotendPreheat, 0));
-    TERN_(WAIT_FOR_BED_HEAT,    if (bedPreheat)    thermalManager.setTargetBed(bedPreheat));
-    TERN_(WAIT_FOR_NOZZLE_HEAT, if (hotendPreheat) thermalManager.wait_for_hotend(0));
-    TERN_(WAIT_FOR_BED_HEAT,    if (bedPreheat)    thermalManager.wait_for_bed_heating());
+    TERN_(WAIT_FOR_NOZZLE_HEAT, if (hotendPreheat==hotend_temp) thermalManager.setTargetHotend(hotendPreheat, 0));
+    TERN_(WAIT_FOR_BED_HEAT,    if (bedPreheat==bed_temp)    thermalManager.setTargetBed(bedPreheat));
+    TERN_(WAIT_FOR_NOZZLE_HEAT, if (thermalManager.degTargetHotend(0) < hotend_temp) thermalManager.wait_for_hotend(0));
+    TERN_(WAIT_FOR_BED_HEAT,    if (thermalManager.degTargetBed() < bed_temp)    thermalManager.wait_for_bed_heating());
   }
 
 #endif
