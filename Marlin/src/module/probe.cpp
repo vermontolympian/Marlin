@@ -340,14 +340,14 @@ FORCE_INLINE void probe_specific_action(const bool deploy) {
 
     #if ENABLED(WAIT_FOR_NOZZLE_HEAT)
       uint16_t hotendPreheat;
-      if (thermalManager.degHotend(0) < hotend_temp && thermalManager.degTargetHotend(0) < hotend_temp) hotendPreheat = hotend_temp;
+      if (thermalManager.degHotend(0) < hotend_temp || thermalManager.degTargetHotend(0) < hotend_temp) hotendPreheat = hotend_temp;
       else if (thermalManager.degTargetHotend(0) < hotend_temp) hotendPreheat = thermalManager.degTargetHotend(0);
       else hotendPreheat = 0;
     #endif
 
     #if ENABLED(WAIT_FOR_BED_HEAT)
       uint16_t bedPreheat;
-      if (thermalManager.degBed() < bed_temp &&  thermalManager.degTargetBed() < hotend_temp) bedPreheat = bed_temp;
+      if (thermalManager.degBed() < bed_temp || thermalManager.degTargetBed() < bed_temp) bedPreheat = bed_temp;
       else if (thermalManager.degTargetBed() < bed_temp) bedPreheat = thermalManager.degTargetBed();
       else bedPreheat = 0;
     #endif
