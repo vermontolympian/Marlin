@@ -44,7 +44,7 @@ void EstepsHandler::Init() {
 
 
 void EstepsHandler::HandleStartButton(DGUS_VP_Variable &var, void *val_ptr) {
-    static_assert(ADVANCED_PAUSE_PURGE_LENGTH == 0, "Assuming PURGE_LENGTH is 0 so we can use M701");
+    //static_assert(ADVANCED_PAUSE_PURGE_LENGTH == 0, "Assuming PURGE_LENGTH is 0 so we can use M701");
 
     // Validate
     if (calibration_temperature < EXTRUDE_MINTEMP) {
@@ -81,7 +81,7 @@ void EstepsHandler::HandleStartButton(DGUS_VP_Variable &var, void *val_ptr) {
     }
 
     planner.synchronize();
-   
+
     // Set-up command
     SetStatusMessage(PSTR("Extruding..."));
 
@@ -119,7 +119,7 @@ void EstepsHandler::HandleApplyButton(DGUS_VP_Variable &var, void *val_ptr) {
     settings.save();
 
     ScreenHandler.Buzzer(0, 250);
-    
+
     ScreenHandler.PopToOldScreen();
     ScreenHandler.GotoScreen(DGUSLCD_SCREEN_MAIN, false);
 

@@ -380,8 +380,8 @@ FORCE_INLINE void probe_specific_action(const bool deploy) {
 
     DEBUG_EOL();
 
-    TERN_(WAIT_FOR_NOZZLE_HEAT, if (hotend_temp > thermalManager.degHotend(0) + (TEMP_WINDOW)) thermalManager.wait_for_hotend(0));
-    TERN_(WAIT_FOR_BED_HEAT,    if (bed_temp > thermalManager.degBed() + (TEMP_BED_WINDOW))    thermalManager.wait_for_bed_heating());
+    TERN_(WAIT_FOR_NOZZLE_HEAT, if (!WITHIN(thermalManager.degHotend(0), (thermalManager.degTargetHotend(0) - TEMP_HYSTERESIS), (thermalManager.degTargetHotend(0) + TEMP_HYSTERESIS))) thermalManager.wait_for_hotend(0, false));
+    TERN_(WAIT_FOR_BED_HEAT,    if (!WITHIN(thermalManager.degBed(), (thermalManager.degTargetBed() - TEMP_BED_HYSTERESIS), (thermalManager.degTargetBed() + TEMP_BED_HYSTERESIS)))   thermalManager.wait_for_bed_heating(false));
   }
 
 #endif

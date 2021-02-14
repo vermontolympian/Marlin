@@ -672,7 +672,7 @@ class Temperature {
         #endif
       );
 
-      static void wait_for_bed_heating();
+      static void wait_for_bed_heating(const bool no_wait_for_cooling=true);
 
       FORCE_INLINE static bool degBedNear(const float &temp) {
         return ABS(degBed() - temp) < (TEMP_BED_HYSTERESIS);
