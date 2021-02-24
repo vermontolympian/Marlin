@@ -2,7 +2,7 @@
 #define GraphicalLCD // Will work next to MKS TFT
 #define TMC_2209 // Defaults to TMC2100
 #define ABL_UBL // Defaults to Bilinear
-#define RunoutSensor // Tinymachines Lerdge Sensor
+//#define RunoutSensor // Tinymachines Lerdge Sensor
 #define RELOCATE_LED // Since the bltouch by default removed the LED, set this if you simply moved them off the hotend
 //#define E3DHermeaExtruder
 
@@ -1427,7 +1427,7 @@
   // Gradually reduce leveling correction until a set height is reached,
   // at which point movement will be level to the machine's XY plane.
   // The height can be set with M420 Z<height>
-  #define ENABLE_LEVELING_FADE_HEIGHT
+  //#define ENABLE_LEVELING_FADE_HEIGHT
   #if ENABLED(ENABLE_LEVELING_FADE_HEIGHT)
     #define DEFAULT_LEVELING_FADE_HEIGHT 10.0 // (mm) Default fade height.
   #endif
