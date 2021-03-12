@@ -47,7 +47,20 @@ void menu_user() {
   START_MENU();
   BACK_ITEM(MSG_MAIN);
   #define HAS_USER_ITEM(N) (defined(USER_DESC_##N) && defined(USER_GCODE_##N))
-  #define USER_ITEM(N) ACTION_ITEM_P(PSTR(USER_DESC_##N), []{ _lcd_user_gcode(PSTR(USER_GCODE_##N _DONE_SCRIPT)); });
+  #if ENABLED(CUSTOM_USER_MENU_CONFIRM)
+    #define USER_ITEM(N) SUBMENU_P(PSTR(USER_DESC_##N), []{ MenuItem_confirm::confirm_screen( \
+    []{ \
+      _lcd_user_gcode(PSTR(USER_GCODE_##N _DONE_SCRIPT)); \
+      ui.goto_previous_screen(); \
+    }, \
+    ui.goto_previous_screen, \
+    PSTR(USER_DESC_##N "?")   \
+  ); });
+
+  
+  #else
+    #define USER_ITEM(N) ACTION_ITEM_P(PSTR(USER_DESC_##N), []{ _lcd_user_gcode(PSTR(USER_GCODE_##N _DONE_SCRIPT)); });
+  #endif
   #if HAS_USER_ITEM(1)
     USER_ITEM(1);
   #endif

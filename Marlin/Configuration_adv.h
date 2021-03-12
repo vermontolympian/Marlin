@@ -3406,6 +3406,8 @@
   #define CUSTOM_USER_MENUS
 #endif
 #if ENABLED(CUSTOM_USER_MENUS)
+  #define CUSTOM_MENU_ONLY_IDLE // Only show custom menu when idle
+  #define CUSTOM_USER_MENU_CONFIRM // Show confirmation dialog on user menu actions
   #define CUSTOM_USER_MENU_TITLE "Tool Heads"
   #define USER_SCRIPT_DONE "M117 Tool Changed"
   #define USER_SCRIPT_AUDIBLE_FEEDBACK
