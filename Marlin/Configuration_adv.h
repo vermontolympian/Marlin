@@ -480,7 +480,9 @@
  * Multiple extruders can be assigned to the same pin in which case
  * the fan will turn on when any selected extruder is above the threshold.
  */
-#if ENABLED(RAPTOR2) && DISABLED(SKRBoard)
+#if ENABLED(Trex3Board) && DISABLED(RaptorFanPins)
+  #define E0_AUTO_FAN_PIN 6
+#elif ENABLED(RAPTOR2) && DISABLED(SKRBoard)
   #define E0_AUTO_FAN_PIN 9
 #else
   #define E0_AUTO_FAN_PIN -1
@@ -585,7 +587,7 @@
 //
 // For Z set the number of stepper drivers
 //
-#if ENABLED(SKRBoard) && ENABLED(DualZ)
+#if ANY(SKRBoard, Trex3Board) && ENABLED(DualZ)
   #define NUM_Z_STEPPER_DRIVERS 2   // (1-4) Z options change based on how many
 #else
   #define NUM_Z_STEPPER_DRIVERS 1   // (1-4) Z options change based on how many
@@ -762,7 +764,7 @@
  * Z Steppers Auto-Alignment
  * Add the G34 command to align multiple Z steppers using a bed probe.
  */
-#if ENABLED(SKRBoard) && ENABLED(DualZ)
+#if ANY(SKRBoard, Trex3Board) && ENABLED(DualZ)
   #define Z_STEPPER_AUTO_ALIGN
 #endif
 #if ENABLED(Z_STEPPER_AUTO_ALIGN)

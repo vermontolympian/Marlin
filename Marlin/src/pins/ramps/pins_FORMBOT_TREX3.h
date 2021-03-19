@@ -124,10 +124,15 @@
 #define HEATER_1_PIN                           7
 #define HEATER_BED_PIN                         8
 
-#define FAN_PIN                                9
+#ifndef FAN_PIN
+  #define FAN_PIN                                9
+#endif
 #define FAN1_PIN                              12
 
-#define NUM_RUNOUT_SENSORS                     2
+#ifndef NUM_RUNOUT_SENSORS
+  #define NUM_RUNOUT_SENSORS                     2
+#endif
+
 #define FIL_RUNOUT_PIN                        22
 #define FIL_RUNOUT2_PIN                       21
 

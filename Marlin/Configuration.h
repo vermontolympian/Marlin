@@ -35,11 +35,13 @@
 //#define SKR14
 //#define SKR14Turbo
 //#define SKRPRO11
+//#define Trex3Board
+//#define RaptorFanPins // When using the trex board, invert fan pins to match raptor extruder PCB
 
 //#define I2C_EEPROM  // use I2C EEPROM on SRK PRO v1.1 e.g AT24C256
 //#define SKR14_PowerLossKit // Bigtreetech power loss kit for SKR14
 
-//#define DualZ // Uses 5th driver on SKR boards as Z2
+//#define DualZ // Uses 5th driver on SKR Or Trex 3 (Use X2 plug) boards as Z2
 
 /**
  * Enable if you install a KEENOVO AC BED with Solid State Relay
@@ -102,6 +104,17 @@
 #if ANY(SKR13, SKR14, SKR14Turbo, SKRPRO11)
   #define SKRBoard
 #endif
+
+#if ENABLED(Trex3Board)
+  #define Z2_STEP_PIN                           42
+  #define Z2_DIR_PIN                            43
+  #define Z2_ENABLE_PIN                         44
+
+  #if ENABLED(RaptorFanPins)
+    #define FAN_PIN 6
+  #endif
+#endif
+
 /**
  * Marlin 3D Printer Firmware
  * Copyright (c) 2020 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
@@ -250,6 +263,8 @@
     #define MOTHERBOARD BOARD_BTT_SKR_V1_3
   #elif ENABLED(SKRPRO11)
     #define MOTHERBOARD BOARD_BTT_SKR_PRO_V1_1
+  #elif ENABLED(Trex3Board)
+    #define MOTHERBOARD BOARD_FORMBOT_TREX3
   #elif ENABLED(RAPTOR2)
     #define MOTHERBOARD BOARD_FORMBOT_RAPTOR2
   #else
