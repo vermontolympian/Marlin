@@ -1266,6 +1266,8 @@
   #define NOZZLE_TO_PROBE_OFFSET { -38, 0, 0 }
 #elif ENABLED(HotendMosquito)
   #define NOZZLE_TO_PROBE_OFFSET { 35, 10, 0 }
+#elif ENABLED(ExtruderDDX)
+  #define NOZZLE_TO_PROBE_OFFSET { -34.5, 10, 0 }
 #else
   #define NOZZLE_TO_PROBE_OFFSET { -22, 0, 0 }
 #endif
