@@ -117,9 +117,9 @@ void menu_media() {
   START_MENU();
   BACK_ITEM_P(TERN1(BROWSE_MEDIA_ON_INSERT, screen_history_depth) ? GET_TEXT(MSG_MAIN) : GET_TEXT(MSG_BACK));
   if (card.flag.workDirIsRoot) {
-    #if !PIN_EXISTS(SD_DETECT)
+    //#if !PIN_EXISTS(SD_DETECT) ||
       ACTION_ITEM(MSG_REFRESH, []{ encoderTopLine = 0; card.mount(); });
-    #endif
+    //#endif
   }
   else if (card.isMounted())
     ACTION_ITEM_P(PSTR(LCD_STR_FOLDER ".."), lcd_sd_updir);
