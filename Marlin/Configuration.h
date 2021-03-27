@@ -1,3 +1,10 @@
+//#define TronxyXY2A
+#define TronxyX5SPro
+//#define TronxyX3 // No ABL - Untested
+
+#define TMC2208Drv
+#define TitanExtruder
+
 /**
  * Marlin 3D Printer Firmware
  * Copyright (c) 2020 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
@@ -127,11 +134,21 @@
 
 // Choose the name from boards.h that matches your setup
 #ifndef MOTHERBOARD
-  #define MOTHERBOARD BOARD_CHITU3D_V6
+  #if ENABLED(TronxyXY2A)
+    #define MOTHERBOARD BOARD_CHITU3D_V5
+  #else
+    #define MOTHERBOARD BOARD_CHITU3D_V6
+  #endif
 #endif
 
 // Name displayed in the LCD "Ready" message and Info menu
-#define CUSTOM_MACHINE_NAME "Tronxy X5SA"
+#if ENABLED(TronxyX5SPro)
+  #define CUSTOM_MACHINE_NAME "Tronxy X5SA"
+#elif ENABLED(TronxyXY2A)
+  #define CUSTOM_MACHINE_NAME "Tronxy XY2A"
+#elif ENABLED(TronxyX3)
+  #define CUSTOM_MACHINE_NAME "Tronxy X3"
+#endif
 
 // Printer's unique ID, used by some programs to differentiate between machines.
 // Choose your own or use a service like https://www.uuidgenerator.net/version4
@@ -649,7 +666,9 @@
 
 // Enable one of the options below for CoreXY, CoreXZ, or CoreYZ kinematics,
 // either in the usual order or reversed
-#define COREXY
+#if DISABLED(TronxyXY2A)
+  #define COREXY
+#endif
 //#define COREXZ
 //#define COREYZ
 //#define COREYX
@@ -789,10 +808,19 @@
  * Override with M92
  *                                      X, Y, Z, E0 [, E1[, E2...]]
  */
-#define DEFAULT_AXIS_STEPS_PER_UNIT   { 160, 160, 800, 764 }
-// TITAN EXTRUDER:
-//#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 400, 92.6 }
-
+#if ENABLED(TMC2208Drv)
+  #if ENABLED(TitanExtruder)
+    #define DEFAULT_AXIS_STEPS_PER_UNIT   { 160, 160, 800, 764 }
+  #else
+    #define DEFAULT_AXIS_STEPS_PER_UNIT   { 160, 160, 800, 382 }
+  #endif
+#else
+  #if ENABLED(TitanExtruder)
+    #define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 400, 185.2 }
+  #else
+    #define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 400, 92.6 }
+  #endif
+#endif
 /**
  * Default Max Feed Rate (mm/s)
  * Override with M203
@@ -925,15 +953,17 @@
  * Use G29 repeatedly, adjusting the Z height at each point with movement commands
  * or (with LCD_BED_LEVELING) the LCD controller.
  */
-//#define PROBE_MANUALLY
-//#define MANUAL_PROBE_START_Z 0.2
-
+#if ANY(TronxyX3)
+  #define PROBE_MANUALLY
+  #define MANUAL_PROBE_START_Z 0.2
+#endif
 /**
  * A Fix-Mounted Probe either doesn't deploy or needs manual deployment.
  *   (e.g., an inductive probe or a nozzle-based probe-switch.)
  */
-#define FIX_MOUNTED_PROBE
-
+#if NONE(TronxyX3)
+  #define FIX_MOUNTED_PROBE
+#endif
 /**
  * Use the nozzle as the probe, with the hotend
  * assembly attached to a sensitive strain gauge.
@@ -1127,8 +1157,9 @@
 #define Z_PROBE_OFFSET_RANGE_MAX 9
 
 // Enable the M48 repeatability test to test probe accuracy
-#define Z_MIN_PROBE_REPEATABILITY_TEST
-
+#if NONE(TronxyX3)
+  #define Z_MIN_PROBE_REPEATABILITY_TEST
+#endif
 // Before deploy/stow pause for user confirmation
 //#define PAUSE_BEFORE_DEPLOY_STOW
 #if ENABLED(PAUSE_BEFORE_DEPLOY_STOW)
@@ -1182,14 +1213,21 @@
 // @section machine
 
 // Invert the stepper direction. Change (or reverse the motor connector) if an axis goes the wrong way.
-#define INVERT_X_DIR true
-#define INVERT_Y_DIR true
-#define INVERT_Z_DIR false
-
+#if ENABLED(TMC2208Drv)
+  #define INVERT_X_DIR false
+  #define INVERT_Y_DIR true
+  #define INVERT_Z_DIR true
+  #define INVERT_E0_DIR false
+#else
+  #define INVERT_X_DIR true
+  #define INVERT_Y_DIR true
+  #define INVERT_Z_DIR false
+  #define INVERT_E0_DIR true
+#endif
 // @section extruder
 
 // For direct drive extruder v9 set to true, for geared extruder set to false.
-#define INVERT_E0_DIR true
+
 #define INVERT_E1_DIR false
 #define INVERT_E2_DIR false
 #define INVERT_E3_DIR false
@@ -1224,16 +1262,35 @@
 // @section machine
 
 // The size of the print bed
-#define X_BED_SIZE 330
-#define Y_BED_SIZE 330
+#if ENABLED(TronxyXY2A)
+  #define X_BED_SIZE 220
+  #define Y_BED_SIZE 220
+#elif ENABLED(TronxyX5SPro)
+  #define X_BED_SIZE 330
+  #define Y_BED_SIZE 330
+#elif ENABLED(TronxyX3)
+  #define X_BED_SIZE 310
+  #define Y_BED_SIZE 310
+#endif
 
 // Travel limits (mm) after homing, corresponding to endstop positions.
-#define X_MIN_POS 0
-#define Y_MIN_POS 0
+#if ENABLED(TronxyXY2A)
+  #define X_MIN_POS -17
+  #define Y_MIN_POS -25
+  #define Z_MAX_POS 316
+#elif ENABLED(TronxyX5SPro)
+  #define X_MIN_POS 0
+  #define Y_MIN_POS 0
+  #define Z_MAX_POS 400
+#elif ENABLED(TronxyX3)
+  #define X_MIN_POS -17
+  #define Y_MIN_POS -25
+  #define Z_MAX_POS 330
+#endif
+
 #define Z_MIN_POS 0
 #define X_MAX_POS X_BED_SIZE
 #define Y_MAX_POS Y_BED_SIZE
-#define Z_MAX_POS 400
 
 /**
  * Software Endstops
@@ -2540,10 +2597,10 @@
 
   #define TOUCH_SCREEN_CALIBRATION
 
-  #define TOUCH_CALIBRATION_X -12316
-  #define TOUCH_CALIBRATION_Y   8981
-  #define TOUCH_OFFSET_X         340
-  #define TOUCH_OFFSET_Y         -20
+  //#define TOUCH_CALIBRATION_X -12316
+  //#define TOUCH_CALIBRATION_Y   8981
+  //#define TOUCH_OFFSET_X         340
+  //#define TOUCH_OFFSET_Y         -20
   #define TOUCH_ORIENTATION TOUCH_LANDSCAPE
 
   #if BOTH(TOUCH_SCREEN_CALIBRATION, EEPROM_SETTINGS)
