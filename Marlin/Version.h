@@ -104,14 +104,14 @@
 #define VerChar6 "N"
 #endif
 
-#define DETAILED_BUILD_VERSION SHORT_BUILD_VERSION " TM3D " VerChar1 VerChar2 VerChar3 VerChar4 VerChar5 VerChar6
+#define DETAILED_BUILD_VERSION SHORT_BUILD_VERSION " Bondtech " VerChar1 VerChar2 VerChar3 VerChar4 VerChar5 VerChar6
 
 /**
  * The STRING_DISTRIBUTION_DATE represents when the binary file was built,
  * here we define this default string as the date where the latest release
  * version was tagged.
  */
-#define STRING_DISTRIBUTION_DATE "2021-04-03"
+#define STRING_DISTRIBUTION_DATE "2021-04-18"
 
 /**
  * Defines a generic printer name to be output to the LCD after booting Marlin.
@@ -171,7 +171,7 @@
  * The WEBSITE_URL is the location where users can get more information such as
  * documentation about a specific Marlin release.
  */
-#define WEBSITE_URL "tinymachines3d.com"
+#define WEBSITE_URL "www.bondtech.se"
 
 /**
  * Set the vendor info the serial USB interface, if changable

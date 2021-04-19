@@ -109,7 +109,7 @@
  */
 
 //#define OrigLCD // Upgraded mainboard with single cable Ender LCD
-//#define GraphicLCD //Full graphics LCD for Ender 4, CR-X, Ender 5 Plus, or CR10SPro
+//#define GraphicLCD // 12864 Full graphics LCD for Ender 4, CR-X, Ender 5 Plus, CR10SPro, or CR10Max
 //#define Big_UI // Lightweight status screen, saves CPU cycles
 
 // Touchscreen options - only 32 bit boards have the open serial ports to use with graphics displays above
@@ -298,7 +298,7 @@
 // @section info
 
 // Author info of this build printed to the host during boot and M115
-#define STRING_CONFIG_H_AUTHOR "TinyMachines3D" // Who made the changes.
+#define STRING_CONFIG_H_AUTHOR "Bondtech / InsanityAutomation" // Who made the changes.
 #define CUSTOM_VERSION_FILE Version.h // Path from the root directory (no quotes)
 
 /**
