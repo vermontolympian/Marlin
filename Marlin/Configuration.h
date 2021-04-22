@@ -463,7 +463,7 @@
   #endif
 #endif
 
-#if ANY(MachineEnder3V2, MachineEnder3Pro422, MachineEnder3Pro427)
+#if ANY(MachineEnder3V2, MachineEnder3Pro422, MachineEnder3Pro427, Creality422, Creality427)
   #define POWER_LOSS_RECOVERY //Screen will not compile without PLR
   #if NONE(BedAC, BedDC)
     #define BedDC
@@ -474,6 +474,12 @@
 #if ANY(MachineEnder3Pro422, MachineEnder3Pro427)
   #define MachineEnder3
   #define RET6_12864_LCD
+#endif
+
+#if ENABLED(MachineEnder3Pro422)
+  #define Creality422
+#elif ENABLED(MachineEnder3Pro427)
+  #define Creality427
 #endif
 
 #if EITHER(Creality422, Creality427) && DISABLED(MachineEnder3V2)
@@ -576,11 +582,15 @@
   #define LCD_SERIAL_PORT 0
   #define LCD_BAUDRATE 115200
   #define SERIAL_CATCHALL -1
-#elif ANY(MachineCR10SPro, MachineCRX, MachineEnder5Plus, MachineCR10Max) && NONE(GraphicLCD, MachineEnder3V2)
+#elif ANY(MachineCR10SPro, MachineCRX, MachineEnder5Plus, MachineCR10Max) && NONE(GraphicLCD, MachineEnder3V2, Creality422, Creality427)
   #define LCD_SERIAL_PORT 2
   #define LCD_BAUDRATE 115200
   #define SERIAL_CATCHALL 0
-#elif ANY(MachineEnder3Pro422, MachineEnder3Pro427) && DISABLED(MachineEnder3V2)
+#elif ANY(MachineCR10SPro, MachineCRX, MachineEnder5Plus, MachineCR10Max) && DISABLED(GraphicLCD)
+  #define LCD_SERIAL_PORT 3
+  #define LCD_BAUDRATE 115200
+  #define SERIAL_CATCHALL 1
+#elif ANY(Creality422, Creality427) && DISABLED(MachineEnder3V2)
   #define SERIAL_PORT_2 3
 #endif
 
@@ -1060,9 +1070,9 @@
   #else
   // If you are using a pre-configured hotend then you can use one of the value sets by uncommenting it
     #if ANY(HotendMosquito, PID50W)
-      #define DEFAULT_Kp 25.95
-      #define DEFAULT_Ki 3.08
-      #define DEFAULT_Kd 54.74
+      #define DEFAULT_Kp 16.8
+      #define DEFAULT_Ki 1.2
+      #define DEFAULT_Kd 54.3
     #elif ENABLED(HotendStock)
       #if ANY(MachineCR10SPro, MachineCR10Max)
         #define DEFAULT_Kp 25.25
