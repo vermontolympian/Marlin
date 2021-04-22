@@ -119,7 +119,7 @@
 //#define AddonFilSensor //Adds a filament runout sensor to the CR20 or Ender 4
 //#define lerdgeFilSensor //Using lerdge filament sensor, which is opposite polarity to stock
 //#define DualFilSensors //Using dual filament sensors on XMax and YMAX
-#define FilamentEncoder //Using filamet jam sensor such as the Bigtreetech Encoder wheel
+//#define FilamentEncoder //Using filamet jam sensor such as the Bigtreetech Encoder wheel
 
 //#define PurgeBucket //Adds automatic wiping on tool change if purge bucket is installed
 
