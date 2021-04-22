@@ -117,41 +117,41 @@
  * Defines a generic printer name to be output to the LCD after booting Marlin.
  */
 #if(ENABLED(MachineMini))
-#define CUSTOM_MACHINE_NAME "Mini SuPeR"
+#define CUSTOM_MACHINE_NAME "Mini DDX"
 #elif(ENABLED(MachineEnder2))
-#define CUSTOM_MACHINE_NAME "TM3D Ender2"
+#define CUSTOM_MACHINE_NAME "DDX Ender2"
 #elif(ENABLED(MachineEnder3))
-#define CUSTOM_MACHINE_NAME "TM3D Ender3"
+#define CUSTOM_MACHINE_NAME "DDX Ender3"
 #elif(ENABLED(MachineEnder3V2))
-#define CUSTOM_MACHINE_NAME "TM3D Ender3V2"
+#define CUSTOM_MACHINE_NAME "DDX Ender3V2"
 #elif(ENABLED(MachineEnder4))
-#define CUSTOM_MACHINE_NAME "TM3D Ender4"
+#define CUSTOM_MACHINE_NAME "DDX Ender4"
 #elif(ENABLED(MachineEnder5))
-#define CUSTOM_MACHINE_NAME "TM3D Ender5"
+#define CUSTOM_MACHINE_NAME "DDX Ender5"
 #elif(ENABLED(MachineEnder5Plus))
-#define CUSTOM_MACHINE_NAME "TM3D E5 Plus"
+#define CUSTOM_MACHINE_NAME "DDX E5 Plus"
 #elif(ENABLED(MachineCR20))
-#define CUSTOM_MACHINE_NAME "SuPeR CR-20"
+#define CUSTOM_MACHINE_NAME "DDX CR-20"
 #elif(ENABLED(MachineCR10Orig))
-#define CUSTOM_MACHINE_NAME "SuPeR CR-10"
+#define CUSTOM_MACHINE_NAME "DDX CR-10"
 #elif(ENABLED(MachineCRX))
-#define CUSTOM_MACHINE_NAME "TM3D CR-X"
+#define CUSTOM_MACHINE_NAME "DDX CR-X"
 #elif ENABLED(MachineCR10SProV2)
-  #define CUSTOM_MACHINE_NAME "TM3D 10SProV2"
+  #define CUSTOM_MACHINE_NAME "DDX 10SProV2"
 #elif(ENABLED(MachineCR10SPro))
-#define CUSTOM_MACHINE_NAME "TM3D 10S Pro"
+#define CUSTOM_MACHINE_NAME "DDX 10S Pro"
 #elif(ENABLED(MachineCR10Max))
-#define CUSTOM_MACHINE_NAME "TM3D Max"
+#define CUSTOM_MACHINE_NAME "DDX Max"
 #elif(ENABLED(MachineCR10SV2))
-#define CUSTOM_MACHINE_NAME "TM3D CR10V2"
+#define CUSTOM_MACHINE_NAME "DDX CR10V2"
 #elif(ENABLED(MachineCR10Std))
-#define CUSTOM_MACHINE_NAME "300 SuPeR"
+#define CUSTOM_MACHINE_NAME "300 DDX"
 #elif(ENABLED(MachineS4))
-#define CUSTOM_MACHINE_NAME "400 SuPeR"
+#define CUSTOM_MACHINE_NAME "400 DDX"
 #elif(ENABLED(MachineS5))
-#define CUSTOM_MACHINE_NAME "500 SuPeR"
+#define CUSTOM_MACHINE_NAME "500 DDX"
 #elif ENABLED(MachineCR2020)
-  #define CUSTOM_MACHINE_NAME "TM3D 2020"
+  #define CUSTOM_MACHINE_NAME "DDX 2020"
 #endif
 
 /**
