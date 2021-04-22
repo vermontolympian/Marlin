@@ -364,6 +364,11 @@ void onIdle()
     rtscheck.RTS_SndData(currPage, FilesCurentPage);
     rtscheck.RTS_SndData(maxPages, FilesMaxPage);
   }
+  else
+  {
+    rtscheck.RTS_SndData(0, FilesCurentPage);
+    rtscheck.RTS_SndData(0, FilesMaxPage);
+  }
 
   void yield();
 	if (rtscheck.RTS_RecData() > 0)
@@ -1550,6 +1555,7 @@ SERIAL_ECHOLNPGM_P(PSTR("BeginSwitch"));
           SERIAL_ECHOLNPGM_P(PSTR("GoUpDir"));
           fileIndex = 0;
           filenavigator.getFiles(0);
+          fileIndex = 0;
           return;
         }
 
@@ -1569,6 +1575,7 @@ SERIAL_ECHOLNPGM_P(PSTR("BeginSwitch"));
           fileIndex = 0;
           filenavigator.changeDIR((char *)filenavigator.getIndexName(fileIndex + recordcount));
           filenavigator.getFiles(0);
+          fileIndex = 0;
           return;
         }
         else{
