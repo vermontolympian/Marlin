@@ -313,12 +313,6 @@
  */
 
 // Enable to show the bitmap in Marlin/_Bootscreen.h on startup.
-#if ENABLED(MachineCR10SProV2)
-  #define MachineCR10SPro
-  #if NONE(ABL_NCSW, ABL_EZABL, ABL_BLTOUCH)
-    #define ABL_BLTOUCH
-  #endif
-#endif
 
 #if BOTH(PowerShutoffKit, EnclosureLight)
   #undef EnclosureLight
@@ -354,6 +348,13 @@
 
 #if ENABLED(ABL_EZABL12MM)
   #define ABL_EZABL
+#endif
+
+#if ENABLED(MachineCR10SProV2)
+  #define MachineCR10SPro
+  #if NONE(ABL_NCSW, ABL_EZABL, ABL_BLTOUCH)
+    #define ABL_BLTOUCH
+  #endif
 #endif
 
 #if ENABLED(MachineCR10SPro)

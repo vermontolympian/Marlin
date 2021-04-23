@@ -354,13 +354,18 @@ void onIdle()
 
   if(isMediaInserted())
   {
-    uint16_t currPage;
+    uint16_t currPage, maxPageAdd;
     if(fileIndex == 0)
       currPage = 1;
     else
       currPage = CEIL((float)((float)fileIndex / (float)DISPLAY_FILES)) +1;
 
-    uint16_t maxPages = CEIL(((float)filenavigator.maxFiles() / (float)DISPLAY_FILES));
+    if(filenavigator.folderdepth!=0)
+      maxPageAdd = 1;
+    else
+      maxPageAdd = 0;
+    uint16_t maxPages = CEIL((float)(filenavigator.maxFiles()+ maxPageAdd) / (float)DISPLAY_FILES );
+
     rtscheck.RTS_SndData(currPage, FilesCurentPage);
     rtscheck.RTS_SndData(maxPages, FilesMaxPage);
   }
@@ -1553,7 +1558,6 @@ SERIAL_ECHOLNPGM_P(PSTR("BeginSwitch"));
         if(filenavigator.currentindex == 0 && filenavigator.folderdepth > 0 && (fileIndex + recordcount) == 0) {
           filenavigator.upDIR();
           SERIAL_ECHOLNPGM_P(PSTR("GoUpDir"));
-          fileIndex = 0;
           filenavigator.getFiles(0);
           fileIndex = 0;
           return;
@@ -1572,7 +1576,6 @@ SERIAL_ECHOLNPGM_P(PSTR("BeginSwitch"));
 
         if(filenavigator.getIndexisDir(fileIndex + recordcount)) {
           SERIAL_ECHOLNPAIR("Is Dir ", (fileIndex + recordcount));
-          fileIndex = 0;
           filenavigator.changeDIR((char *)filenavigator.getIndexName(fileIndex + recordcount));
           filenavigator.getFiles(0);
           fileIndex = 0;
@@ -1609,9 +1612,13 @@ SERIAL_ECHOLNPGM_P(PSTR("BeginSwitch"));
         else if(recdat.data[0] == 2) //Page Down
         {
           SERIAL_ECHOLNPGM_P(PSTR("PgDown"));
-          if((fileIndex+DISPLAY_FILES) < filenavigator.maxFiles()) {
+          if((fileIndex+DISPLAY_FILES) < (filenavigator.maxFiles() + (filenavigator.folderdepth!=0))) {
             fileIndex = fileIndex + DISPLAY_FILES;
-            filenavigator.getFiles(fileIndex);
+            //if(filenavigator.folderdepth!=0 && fileIndex!=0) //Shift to acknowledge Return DIR button on first page
+            //  filenavigator.getFiles(fileIndex-1);
+           // else
+              filenavigator.getFiles(fileIndex);
+           //filenavigator.getFiles(filenavigator.currentindex+1);
           }
         }
         else if(recdat.data[0] == 3) //Page Up
@@ -1619,6 +1626,9 @@ SERIAL_ECHOLNPGM_P(PSTR("BeginSwitch"));
           SERIAL_ECHOLNPGM_P(PSTR("PgUp"));
           if(fileIndex>=DISPLAY_FILES) {
             fileIndex = fileIndex - DISPLAY_FILES;
+            //if(filenavigator.folderdepth!=0 && fileIndex!=0) //Shift to acknowledge Return DIR button on first page
+              //filenavigator.getFiles(filenavigator.currentindex-DISPLAY_FILES);
+            //else
             filenavigator.getFiles(fileIndex);
           }
         }
