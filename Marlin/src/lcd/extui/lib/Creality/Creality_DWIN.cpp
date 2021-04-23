@@ -125,6 +125,12 @@ void onIdle()
     return;
   }
 
+  // Always send temperature data
+  rtscheck.RTS_SndData(getActualTemp_celsius(H0), NozzleTemp);
+	rtscheck.RTS_SndData(getActualTemp_celsius(BED), Bedtemp);
+  rtscheck.RTS_SndData(getTargetTemp_celsius(H0), NozzlePreheat);
+	rtscheck.RTS_SndData(getTargetTemp_celsius(BED), BedPreheat);
+
   reEntryPrevent = true;
   idleThrottling = 0;
   if(waitway && !commandsInQueue())
@@ -284,13 +290,7 @@ void onIdle()
 
 
 			rtscheck.RTS_SndData(getZOffset_mm() * 100, ProbeOffset_Z);
-			//float temp_buf = getActualTemp_celsius(H0);
-			rtscheck.RTS_SndData(getActualTemp_celsius(H0), NozzleTemp);
-			rtscheck.RTS_SndData(getActualTemp_celsius(BED), Bedtemp);
-      rtscheck.RTS_SndData(getTargetTemp_celsius(H0), NozzlePreheat);
-			rtscheck.RTS_SndData(getTargetTemp_celsius(BED), BedPreheat);
 			rtscheck.RTS_SndData((unsigned int)(getFlowPercentage(E0)), Flowrate);
-			//SERIAL_ECHOLNPAIR("getFlowPercentage =", (unsigned int)getFlowPercentage(E0));
       rtscheck.RTS_SndData((unsigned int)(getAxisSteps_per_mm(X) * 10), StepMM_X);
       rtscheck.RTS_SndData((unsigned int)(getAxisSteps_per_mm(Y) * 10), StepMM_Y);
       rtscheck.RTS_SndData((unsigned int)(getAxisSteps_per_mm(Z) * 10), StepMM_Z);
@@ -1425,7 +1425,7 @@ SERIAL_ECHOLNPGM_P(PSTR("BeginSwitch"));
         }
         #if HAS_PID_HEATING
           case 2: {
-            SERIAL_ECHOLNPGM_P(PSTR("Hotend PID"));
+            onStatusChanged_P(PSTR("Hotend PID Started"));
             startPIDTune(pid_hotendAutoTemp, getActiveTool());
             break;
           }
@@ -1443,6 +1443,7 @@ SERIAL_ECHOLNPGM_P(PSTR("BeginSwitch"));
         #if HAS_PID_HEATING
           case 5: {
             #if ENABLED(PIDTEMPBED)
+              onStatusChanged_P(PSTR("Bed PID Started"));
               startBedPIDTune(pid_bedAutoTemp);
             #else
               SERIAL_ECHOLNPGM_P(PSTR("Bed PID Disabled"));
@@ -1923,15 +1924,16 @@ void onConfigurationStoreRead(bool success)
   void onPidTuning(const result_t rst) {
     // Called for temperature PID tuning result
     rtscheck.RTS_SndData(pid_hotendAutoTemp, HotendPID_AutoTmp);
-        rtscheck.RTS_SndData(pid_bedAutoTemp, BedPID_AutoTmp);
-        rtscheck.RTS_SndData((unsigned int)(getPIDValues_Kp(E0) * 10), HotendPID_P);
-        rtscheck.RTS_SndData((unsigned int)(getPIDValues_Ki(E0) * 10), HotendPID_I);
-        rtscheck.RTS_SndData((unsigned int)(getPIDValues_Kd(E0) * 10), HotendPID_D);
-        #if ENABLED(PIDTEMPBED)
-          rtscheck.RTS_SndData((unsigned int)(getBedPIDValues_Kp() * 10), BedPID_P);
-          rtscheck.RTS_SndData((unsigned int)(getBedPIDValues_Ki() * 10), BedPID_I);
-          rtscheck.RTS_SndData((unsigned int)(getBedPIDValues_Kd() * 10), BedPID_D);
-        #endif
+    rtscheck.RTS_SndData(pid_bedAutoTemp, BedPID_AutoTmp);
+    rtscheck.RTS_SndData((unsigned int)(getPIDValues_Kp(E0) * 10), HotendPID_P);
+    rtscheck.RTS_SndData((unsigned int)(getPIDValues_Ki(E0) * 10), HotendPID_I);
+    rtscheck.RTS_SndData((unsigned int)(getPIDValues_Kd(E0) * 10), HotendPID_D);
+    #if ENABLED(PIDTEMPBED)
+      rtscheck.RTS_SndData((unsigned int)(getBedPIDValues_Kp() * 10), BedPID_P);
+      rtscheck.RTS_SndData((unsigned int)(getBedPIDValues_Ki() * 10), BedPID_I);
+      rtscheck.RTS_SndData((unsigned int)(getBedPIDValues_Kd() * 10), BedPID_D);
+    #endif
+    onStatusChanged_P(PSTR("PID Tune Finished"));
   }
 #endif
 void onMeshLevelingStart() {

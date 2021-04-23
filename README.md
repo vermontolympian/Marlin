@@ -1,23 +1,22 @@
-﻿## Bondtech DDX Creality CR10S Pro (V2), CR10 Max and Ender 5 Plus Touch Screen supported firmware
-## Also includes
+﻿## Bondtech DDX Creality Firmware, with Touchscreen support
 
-This branch has been developed in collaboration with [Bondtech](https://www.bondtech.se/) and [Tiny Machines 3D](https://www.tinymachines3d.com/?rfsn=3419592.cc302fe) and is intended to offer preconfigured Bondtech DDX configurations for the most common Creality machines. It includes support for the following machines :
+This branch has been developed in collaboration with [Bondtech](https://www.bondtech.se/) and [Tiny Machines 3D](https://www.tinymachines3d.com/?rfsn=3419592.cc302fe). It is intended to offer
+preconfigured Bondtech DDX configurations for the most common Creality machines and includes support for the following machines :
 
 - [CR10S Pro](http://bit.ly/2rxZ6lP)
 - [CR10S Pro V2](http://bit.ly/2rxZ6lP)
 - [CR10 Max](http://bit.ly/2L6wZRy)
-- [Ender 5 Plus](https://amzn.to/37TE8yH)
-- [CR10 V2 ](http://bit.ly/37PaXfV)
-- [Ender 3]
-- [Ender 3 Pro 4.2.2 and 4.2.7]
-- [Ender 3 V2]
-- [Ender 5]
-- [Ender 5 Pro 4.2.2 and 4.2.7]
+- [Ender 5 Plus](https://bit.ly/2SriM5I)
+- [CR10 V2/V3 ](https://bit.ly/3nnhPcM)
+- [Ender 3 / Pro 4.2.2 and 4.2.7](https://bit.ly/3ncWu5I)
+- [Ender 3 V2](https://bit.ly/3xmx4XI)
+- [Ender 5 / Pro 4.2.2 and 4.2.7]
 
 
 Screen files are archived with [7-Zip](https://www.7-zip.org/) simply because it came out 1/5 the file size of a zip file. That added up fast!
 
-There is an limitation with Windows systems and path depth so the file names need to be shorter than we would prefer. If you get an error compiling due to the path limit, move the folder to the root of youre hard drive. Here is a legend to decoding what they are :
+There is a limitation with Windows systems and path depth so the file names need to be shorter than we would prefer. If you get an error compiling due to the path limit, move the folder to the
+root of your hard drive. Here is a legend to help decode the files:
 
 - BLT = BLTouch
 - EZABL = TH3D EZABL or other Normally Open 18mm Sensor
@@ -36,15 +35,20 @@ There is an limitation with Windows systems and path depth so the file names nee
 -- Due to the above, the current recommendation is to try and limit folder depth to 3 subdirectories and keep names short if possible.
 - Base bumped to Marlin Bugfix as of 20210418
 
-The default build button is now a batch Build All! If you want to build a custom stock 2560 environment, use the env:megaatmega2560 environment. For SKR 1.3/1.4 boards use the LPC1768/9 environments as usual. For SKR Mini or Creality STM32F1 boards use the standard STM32 environments per vendor.
+The default build button is now a batch Build All! If you want to build a custom stock 2560 environment, use the env:megaatmega2560 environment.
+For SKR 1.3/1.4 boards use the LPC1768/9 environments as usual. For SKR Mini or Creality STM32F1 boards use the standard STM32 environments per vendor.
 
 ## About Our Branches
 
-The firmware branches maintained here are made possible by the support of sponsors like [Tiny Machines 3D](https://www.tinymachines3d.com/?rfsn=3419592.cc302fe) as well as our customer base through our 3D printing Services. Maintaining and developing these branches takes a significant investment, made up of time and machines. To support continued development, please consider your next 3D Printer related purchase from Tiny Machines 3D and thank them for supporting open source development. Or, consider us for printing services outside of your machine’s capabilities. Print service requests can be sent to d.menzel@insanityautomation.com and we will respond typically within 1 working day. If you do not need anything printed or a 3D Printer but still want to contribute, you can support us through [Patreon](https://www.patreon.com/InsanityAutomation).
+The firmware branches maintained here are made possible by the support of [Tiny Machines 3D](https://www.tinymachines3d.com/?rfsn=3419592.cc302fe) as well as our customer base through our 3D printing Services.
+Maintaining and developing these branches takes a significant investment, made up of time and machines. To support continued development, please consider your next 3D Printer related purchase from Tiny Machines 3D
+and thank them for supporting open source development. Or, consider us for printing services outside of your machine’s capabilities. Print service requests can be sent to d.menzel@insanityautomation.com and we will
+respond typically within 1 working day. If you do not need anything printed or a 3D Printer but still want to contribute, you can support us through [Patreon](https://www.patreon.com/InsanityAutomation).
 
 ## Setup
 
-All configuration options intended to be adjusted by end users have been placed in the top section of Configuration.h and have been documented there. There is typically a break line to segregate the standard configuration below. Anything aside from the upper options is intended for advanced users only.
+All configuration options intended to be adjusted by end users have been placed in the top section of Configuration.h and have been documented there. There is typically a break line to segregate the standard
+configuration below. Anything aside from the upper options is intended for advanced users only.
 
 ## Known Issues
  - While auto leveling (measuring) is in progress pressing other buttons on the screen can abort portions of the script depending where it is
@@ -52,7 +56,9 @@ All configuration options intended to be adjusted by end users have been placed 
 
 ## Support
 
-This firmware is provided to the public as-is with no warranty or guarantee. It's based on a large open source project and there is no entitlement to support. That said, Tiny Machines 3D customers may obtain support through their normal support queue. I will provide support to Patreons as I am able. If you require more immediate support and are not a Tiny Machines customer, you may contact them at support@tinymachines3d.com about purchasing support hours. Aside from this, we are active many Facebook groups as well as several discord channels and typically help anyone we can when we come across them.
+This firmware is provided to the public as-is with no warranty or guarantee. It's based on a large open source project and there is no entitlement to support. That said, Tiny Machines 3D customers may obtain
+support through their normal support queue. I will provide support to Patreons as I am able. If you require more immediate support and are not a Tiny Machines 3D customer, you may contact them at
+support@tinymachines3d.com about purchasing support hours. Aside from this, we are active on many Facebook groups as well as several discord channels and typically help anyone we can when we come across them.
 
 3D Printing Discord - https://discord.gg/MZrsgVU
 Marlin Discord - https://discord.gg/n5NJ59y
@@ -63,6 +69,7 @@ For this branch, we still have some active goals open that we plan to continue w
 - Volume and leveling state EEPROM storage
 - Brightness control
 - Develop internal Marlin state structure for better reporting of pause / block conditions
+- Add PID tune status screens as upstream blocks UI updates while processing
 
 
 ## Creality Firmware Branches
@@ -83,12 +90,13 @@ For this branch, we still have some active goals open that we plan to continue w
   - Tronxy Chithu Machines [Tronxy](https://github.com/InsanityAutomation/Marlin/tree/TronxyX5SA)
 
 
-
 [Marlin Commit History](https://github.com/MarlinFirmware/Marlin/pulls?q=is%3Apr+is%3Aclosed+author%3AInsanityAutomation)
 
 
 ## Marlin
-This is just one of many forks of Marlin. We don't try to bury that behind fancy marmarketingketting or anything else. As you can see from the links above, most of the work done here is submitted back to the mainstream Marlin branches. The end goal of every project is to get it to the point where it is merged and maintained there. See marlin resources, including how to contribute to the Marlin Project as well, down below.
+This is just one of many forks of Marlin. We don't try to bury that behind fancy marketting or anything else. As you can see from the links above, most of the work done here is submitted back to the mainstream Marlin
+branches. The end goal of every project is to get it to the point where it is merged and maintained there. See marlin resources, including how to contribute to the Marlin Project as well, down below.
+
 
 ## Building Marlin 2.0
 
