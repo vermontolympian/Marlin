@@ -70,6 +70,7 @@ For this branch, we still have some active goals open that we plan to continue w
 - Brightness control
 - Develop internal Marlin state structure for better reporting of pause / block conditions
 - Add PID tune status screens as upstream blocks UI updates while processing
+- CRX Non ABL Manual mesh interface to bring screens into parity with ABL versions
 
 
 ## Creality Firmware Branches
